@@ -1,0 +1,2 @@
+verileri usevericek hooku kullanarak çek
+confirm measjlarını confirm componenti ile çek 
