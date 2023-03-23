@@ -79,7 +79,7 @@ const LoginPage = () => {
   const user = useSelector((state => state.user))
   const dispatch = useDispatch()
 
-  EĞER KULLANICI GİRİS YAPMISSA YONLENDİR
+  // EĞER KULLANICI GİRİS YAPMISSA YONLENDİR
   useEffect(() => {
     if (user.id) {
       router.push("/")
