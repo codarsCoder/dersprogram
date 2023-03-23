@@ -44,6 +44,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setLoader, userLogin } from 'src/redux/userslice'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import useAxios from '../api/axiosWithToken'
 
 
 // ** Styled Components
@@ -78,7 +79,7 @@ const LoginPage = () => {
   const user = useSelector((state => state.user))
   const dispatch = useDispatch()
 
-  // EĞER KULLANICI GİRİS YAPMISSA YONLENDİR
+  EĞER KULLANICI GİRİS YAPMISSA YONLENDİR
   useEffect(() => {
     if (user.id) {
       router.push("/")
@@ -92,6 +93,8 @@ const LoginPage = () => {
   // ** Hook
   const theme = useTheme()
   const router = useRouter()
+
+  const { axiosWithToken } = useAxios();
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -110,8 +113,8 @@ const LoginPage = () => {
 
     event.preventDefault()
 
-    // LOGİN İSTEGİ ATIYORUZ
-    const { data } = await axios.post("https://whereishelal.demoservis.com", {
+    // LOGİN İSTEGİ ATIYORUZ    const { data } = await axiosWithToken.get(`account/${user?.id}/`)
+    const { data } = await axiosWithToken.post( {
       "query": "select",
       "service": "userlogin",
       "mail": values.email,
@@ -127,7 +130,7 @@ const LoginPage = () => {
       toast.success("Giriş Başarılı!")
 
       // REDUXA İŞLİ YORUZ
-      dispatch(userLogin({ id: data?.data.user_id }))
+      dispatch(userLogin({ mail: data?.data.email, token:data?.data.Token }))
 
       // YÖNLENDİRİYORUZ
       router.push("/")

@@ -13,8 +13,8 @@ export const userSlice = createSlice({
 
         // kullanıcı girişinde kullanılacak aksiyon
         userLogin: (state, { payload }) => {
-            state.id = payload.id
-            state.mail = payload.id
+            state.id = payload.mail
+            state.mail = payload.mail
             state.token = payload.token
         },
 

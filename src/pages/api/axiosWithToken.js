@@ -1,9 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
-// ** Config
-import authConfig from 'src/configs/auth'
-import { useAuth } from "src/hooks/useAuth";
 
 const BASE_URL = "https://localhost/";
 
@@ -15,33 +13,29 @@ export const axiosPublic = axios.create({
 const useAxios = () => {
 
   const router = useRouter()
-  const { logout } = useAuth()
 
-  const storedToken = window.sessionStorage.getItem(authConfig.storageTokenKeyName) || JSON.parse(window.localStorage.getItem('userData'))
+
+  // redux tan user al 
+  const token = useSelector((state => state.user.token))
+
+
   let axiosWithToken;
 
-  if (storedToken) {
+  if (token) {
 
     //* Axios Instance for Private API Request
     
     axiosWithToken = axios.create({
       baseURL: BASE_URL,
-      headers: { Authorization: `Token ${storedToken}` },
+      headers: { Authorization: `Token ${token}` },
     });
 
   } else {
-
-    if (router.asPath !== '/') {
-      router.replace({
-        pathname: '/login',
-        query: { returnUrl: router.asPath }
-      })
-    } else {
-      router.push('/login')
-    }
+    router.push('/login')
 
   }
 
+//   const { data } = await axiosWithToken.get(`account/${user?.id}/`) kullanım
 
   return { axiosWithToken };
 };
