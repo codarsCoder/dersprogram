@@ -80,11 +80,11 @@ const LoginPage = () => {
   const dispatch = useDispatch()
 
   // EĞER KULLANICI GİRİS YAPMISSA YONLENDİR
-  useEffect(() => {
-    if (user.id) {
-      router.push("/")
-    }
-  }, [user, router])
+  // useEffect(() => {
+  //   if (user.id) {
+  //     router.push("/")
+  //   }
+  // }, [user, router])
 
   useEffect(() => { //loader açıksa kapatmış olalım
     dispatch(setLoader({ status: false }))
@@ -114,15 +114,11 @@ const LoginPage = () => {
     event.preventDefault()
 
     // LOGİN İSTEGİ ATIYORUZ    const { data } = await axiosWithToken.get(`account/${user?.id}/`)
-    const { data } = await axiosWithToken.post( {
+    const { data } = await axios.post("http://localhost/dersprogram/", {
       "query": "select",
       "service": "userlogin",
-      "mail": values.email,
-      "pass": values.password
-    }, {
-      headers: {
-        "Content-Type": "application/json"
-      }
+      "email": values.email,
+      "parola": values.password
     })
 
     if (data.status) {
@@ -130,7 +126,7 @@ const LoginPage = () => {
       toast.success("Giriş Başarılı!")
 
       // REDUXA İŞLİ YORUZ
-      dispatch(userLogin({ mail: data?.data.email, token:data?.data.Token }))
+      dispatch(userLogin({id: data.data.email,  mail: data.data.email, token:data.data.Token }))
 
       // YÖNLENDİRİYORUZ
       router.push("/")

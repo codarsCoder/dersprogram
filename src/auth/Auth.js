@@ -19,9 +19,9 @@ const Auth = ({children}) => {
     if (!router.isReady) {
         return
       }
-      
+      console.log(user.token)
    // kullanıcının maili reduxdan gelmiyorsa anasayfaya at
-   if (!user.id) {
+   if (!user.token) {
      router.push("/login")
    } else {
     dispatch(setLoader({status:false})) //preloaderdeki işlemi burada iptal ettik

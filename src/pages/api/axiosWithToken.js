@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 
@@ -30,8 +31,13 @@ const useAxios = () => {
       headers: { Authorization: `Token ${token}` },
     });
 
-  } else {
-    router.push('/login')
+  // } else {
+
+  //   useEffect(() => {
+      
+  //     router.push('/login')
+  //   }, []);
+    
 
   }
 

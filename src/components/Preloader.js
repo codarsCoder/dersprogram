@@ -12,7 +12,7 @@ const Preloader = () => {
   const dispatch = useDispatch()
 
 useEffect(() => {
- dispatch(setLoader({status:false}))  // sayfa yenilendiğinde aktif olsun yani bir sayfaya girilmeye çalışılırsa preloader aktif olsunsayfa gözükmesin 
+ dispatch(setLoader({status:true}))  // sayfa yenilendiğinde aktif olsun yani bir sayfaya girilmeye çalışılırsa preloader aktif olsunsayfa gözükmesin 
 }, [])
 
 
