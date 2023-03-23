@@ -1,85 +1,60 @@
 import { useState } from 'react';
 
-const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+export default function FormPage() {
+  const [inputs, setInputs] = useState([{ name: '', surname: '', email: '' }]);
 
-export default function Form() {
-
-  const [formData, setFormData] = useState({
-    Monday: [{ option1: '', option2: '' }],
-    Tuesday: [{ option1: '', option2: '' }],
-    Wednesday: [{ option1: '', option2: '' }],
-    Thursday: [{ option1: '', option2: '' }],
-    Friday: [{ option1: '', option2: '' }],
-    Saturday: [{ option1: '', option2: '' }],
-    Sunday: [{ option1: '', option2: '' }],
-  });
-
-  const handleOption1Change = (dayIndex, index, e) => {
-    const { value } = e.target;
-    const newFormData = { ...formData };
-    newFormData[days[dayIndex]][index].option1 = value;
-    setFormData(newFormData);
+  const handleInputChange = (index, event) => {
+    const { name, value } = event.target;
+    const updatedInputs = [...inputs];
+    updatedInputs[index] = { ...updatedInputs[index], [name]: value };
+    setInputs(updatedInputs);
   };
 
-  const handleOption2Change = (dayIndex, index, e) => {
-    const { value } = e.target;
-    const newFormData = { ...formData };
-    newFormData[days[dayIndex]][index].option2 = value;
-    setFormData(newFormData);
+  const handleAddInput = () => {
+    setInputs([...inputs, { name: '', surname: '', email: '' }]);
   };
 
-  const handleAdd1 = (dayIndex) => {
-    const newFormData = { ...formData };
-    newFormData[days[dayIndex]].push({ option1: '', option2: '' });
-    setFormData(newFormData);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(inputs);
   };
-
-  const handleAdd2 = (dayIndex) => {
-    const newFormData = { ...formData };
-    newFormData[days[dayIndex]].push({ option1: '', option2: '' });
-    setFormData(newFormData);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
-
 
   return (
     <form onSubmit={handleSubmit}>
-      {days.map((day, dayIndex) => (
-        <div key={day}>
-          <h3>{day}</h3>
-          {formData[day].map((data, index) => (
-            <div key={index}>
-              <div>
-                <select
-                  name="option"
-                  value={data.option}
-                  onChange={(e) => handleOptionChange(dayIndex, index, e)}
-                >
-                  <option value="">Choose an option</option>
-                  <option value="Option 1">Option 1</option>
-                  <option value="Option 2">Option 2</option>
-                  <option value="Option 3">Option 3</option>
-                </select>
-                <input
-                  type="text"
-                  name="value"
-                  value={data.value}
-                  onChange={(e) => handleValueChange(dayIndex, index, e)}
-                />
-              </div>
-              {index === formData[day].length - 1 && (
-                <button type="button" onClick={() => handleAdd(dayIndex)}>
-                  Add
-                </button>
-              )}
-            </div>
-          ))}
+      {inputs.map((input, index) => (
+        <div key={index}>
+          <label>
+            Name:
+            <input
+              type="text"
+              name="name"
+              value={input.name}
+              onChange={(event) => handleInputChange(index, event)}
+            />
+          </label>
+          <label>
+            Surname:
+            <input
+              type="text"
+              name="surname"
+              value={input.surname}
+              onChange={(event) => handleInputChange(index, event)}
+            />
+          </label>
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={input.email}
+              onChange={(event) => handleInputChange(index, event)}
+            />
+          </label>
         </div>
       ))}
+      <button type="button" onClick={handleAddInput}>
+        Add input
+      </button>
       <button type="submit">Submit</button>
     </form>
   );
