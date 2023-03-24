@@ -1,61 +1,68 @@
 import { useState } from 'react';
 
-export default function FormPage() {
-  const [inputs, setInputs] = useState([{ name: '', surname: '', email: '' }]);
+const daysOfWeek = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
 
-  const handleInputChange = (index, event) => {
-    const { name, value } = event.target;
-    const updatedInputs = [...inputs];
-    updatedInputs[index] = { ...updatedInputs[index], [name]: value };
-    setInputs(updatedInputs);
+export default function Form() {
+  const [dayInputs, setDayInputs] = useState({});
+
+  const addInput = (day) => {
+    setDayInputs({
+      ...dayInputs,
+      [day]: [...(dayInputs[day] || []), { select: '', input: '' }]
+    });
   };
 
-  const handleAddInput = () => {
-    setInputs([...inputs, { name: '', surname: '', email: '' }]);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(inputs);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(dayInputs);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {inputs.map((input, index) => (
-        <div key={index}>
-          <label>
-            Name:
-            <input
-              type="text"
-              name="name"
-              value={input.name}
-              onChange={(event) => handleInputChange(index, event)}
-            />
-          </label>
-          <label>
-            Surname:
-            <input
-              type="text"
-              name="surname"
-              value={input.surname}
-              onChange={(event) => handleInputChange(index, event)}
-            />
-          </label>
-          <label>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={input.email}
-              onChange={(event) => handleInputChange(index, event)}
-            />
-          </label>
+      {daysOfWeek.map((day) => (
+        <div key={day}>
+          <h2>{day}</h2>
+          {dayInputs[day]?.map((input, index) => (
+            <div key={index}>
+              <select
+                value={input.select}
+                onChange={(e) =>
+                  setDayInputs({
+                    ...dayInputs,
+                    [day]: [
+                      ...dayInputs[day].slice(0, index),
+                      { ...input, select: e.target.value },
+                      ...dayInputs[day].slice(index + 1)
+                    ]
+                  })
+                }
+              >
+                <option value="">Seçiniz</option>
+                <option value="Kahvaltı">Kahvaltı</option>
+                <option value="Öğle Yemeği">Öğle Yemeği</option>
+                <option value="Akşam Yemeği">Akşam Yemeği</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Yemek İsmi"
+                value={input.input}
+                onChange={(e) =>
+                  setDayInputs({
+                    ...dayInputs,
+                    [day]: [
+                      ...dayInputs[day].slice(0, index),
+                      { ...input, input: e.target.value },
+                      ...dayInputs[day].slice(index + 1)
+                    ]
+                  })
+                }
+              />
+            </div>
+          ))}
+          <button onClick={() => addInput(day)}>Ekle</button>
         </div>
       ))}
-      <button type="button" onClick={handleAddInput}>
-        Add input
-      </button>
-      <button type="submit">Submit</button>
+      <button type="submit">Gönder</button>
     </form>
   );
 }
