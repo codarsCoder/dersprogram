@@ -80,11 +80,11 @@ const LoginPage = () => {
   const dispatch = useDispatch()
 
   // EĞER KULLANICI GİRİS YAPMISSA YONLENDİR
-  // useEffect(() => {
-  //   if (user.id) {
-  //     router.push("/")
-  //   }
-  // }, [user, router])
+  useEffect(() => {
+    if (user.id) {
+      router.push("/")
+    }
+  }, [user, router])
 
   useEffect(() => { //loader açıksa kapatmış olalım
     dispatch(setLoader({ status: false }))

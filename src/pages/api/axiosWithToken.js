@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 
-const BASE_URL = "https://localhost/";
+const BASE_URL = "http://localhost/dersprogram/";
 
 //* Axios Instance for Public API Request
 export const axiosPublic = axios.create({
@@ -25,25 +25,28 @@ const useAxios = () => {
   if (token) {
 
     //* Axios Instance for Private API Request
-    
+
     axiosWithToken = axios.create({
       baseURL: BASE_URL,
-      headers: { Authorization: `Token ${token}` },
+      headers: { Authorization: token },
     });
-
-  // } else {
-
-  //   useEffect(() => {
-      
-  //     router.push('/login')
-  //   }, []);
-    
 
   }
 
-//   const { data } = await axiosWithToken.get(`account/${user?.id}/`) kullanım
+
 
   return { axiosWithToken };
 };
 
 export default useAxios;
+
+// const { axiosWithToken } = useAxios();
+// try {
+//   const {data}=  await axiosWithToken.post('', {
+//       query: 'select',
+//       service: 'userlogout',
+//     });
+//     console.log(data)
+//   } catch (error) {
+//     console.error(error);
+//   }

@@ -24,6 +24,7 @@ import MessageOutline from 'mdi-material-ui/MessageOutline'
 import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 import { useDispatch } from 'react-redux'
 import { userLogout } from 'src/redux/userslice'
+import useAxios from 'src/pages/api/axiosWithToken'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -57,11 +58,28 @@ const UserDropdown = () => {
     setAnchorEl(null)
   }
 
-    // Logout
-    const handleLogout = () => {
-      dispatch(userLogout())
-      router.push("/")
+  const { axiosWithToken } = useAxios();
+
+  // Logout
+  const handleLogout = async () => {
+
+    try {
+    const {data}=  await axiosWithToken.post('', {
+        query: 'select',
+        service: 'userlogout',
+      }); 
+        if (data.status) {
+    dispatch(userLogout())
+    router.push("/login")
     }
+      console.log(data)
+    } catch (error) {
+      console.error(error);
+    } 
+
+ 
+
+  }
 
   const styles = {
     py: 2,
