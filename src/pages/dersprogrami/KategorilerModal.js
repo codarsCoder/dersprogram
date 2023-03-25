@@ -8,7 +8,8 @@ import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import useAxios from '../api/axiosWithToken';
 import { toast } from 'react-toastify';
-import { CardHeader, Divider } from '@mui/material';
+import { CardHeader, Divider, IconButton } from '@mui/material';
+import { DeleteCircleOutline, Plus } from 'mdi-material-ui';
 
 const style = {
     position: 'absolute',
@@ -22,13 +23,13 @@ const style = {
     p: 4,
 };
 
-export default function KategorilerModal({ open, setOpen }) {
+export default function KategorilerModal({ open, setOpen, setCategories }) {
 
     const { axiosWithToken } = useAxios();
 
     const [inputs, setInputs] = useState([]);
     const [inputValue, setInputValue] = useState('');
-    const [categories, setCategories] = useState()
+    const [categoriesC, setCategoriesC] = useState()
 
     const handleClose = () => (setOpen(false), setInputs([]));
     const handleOpen = () => setOpen(true);
@@ -56,7 +57,7 @@ export default function KategorilerModal({ open, setOpen }) {
                     service: 'kategori'
                 });
                 if (data.status) {
-                    setCategories(data.data.kategoriler)
+                    setCategoriesC(data.data.kategoriler)
                 }
                 console.log(data)
             } catch (error) {
@@ -80,8 +81,10 @@ export default function KategorilerModal({ open, setOpen }) {
             });
             if (data.status) {
                 toast.success("Kategori(ler) Eklendi.")
+                setCategoriesC(data.data.kategoriler)
+                setCategories(data.data.kategoriler)
                 setInputs([])
-                handleClose();
+              
             }
             console.log(data)
         } catch (error) {
@@ -89,7 +92,7 @@ export default function KategorilerModal({ open, setOpen }) {
         }
 
     };
-    console.log(categories)
+
 
     const handleDeleteKategori = async (id) => {
 
@@ -101,6 +104,7 @@ export default function KategorilerModal({ open, setOpen }) {
             });
             if (data.status) {
                 toast.success("Kategori slindi.")
+                setCategoriesC(data.data.kategoriler)
                 setCategories(data.data.kategoriler)
             }
             console.log(data)
@@ -112,7 +116,6 @@ export default function KategorilerModal({ open, setOpen }) {
 
     return (
         <div>
-            <Button onClick={handleOpen}>Open modal</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -122,7 +125,7 @@ export default function KategorilerModal({ open, setOpen }) {
 
                 <Card sx={style}>
                  
-                    <CardContent sx={{ overflowY: 'auto' , maxHeight:"300" }}>
+                    <CardContent sx={{ overflowY: 'auto' , maxHeight:"500px" }}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             Ders Ekle/Sil
                         </Typography>
@@ -152,15 +155,17 @@ export default function KategorilerModal({ open, setOpen }) {
                             ))}
                             <Box sx={{ marginTop: "10px" }}>
 
-                                <Button onClick={handleAddInput}>Ekle</Button>
+                                < Plus className='add-button' onClick={handleAddInput}/>
                             </Box>
                         </Typography>
                         <Divider/>
-                        <Box sx={{ overflowY: 'auto' , maxHeight:"300" }}>
-                            {categories?.map((ctgr) => (
+                        <Box>
+                            {categoriesC?.map((ctgr) => (
                                 <Box  display="flex" justifyContent="space-between" sx={{ marginTop: "10px" }} key={ctgr.id}>
                                     <Typography>{ctgr.kategori_adi} </Typography>
-                                    <Button onClick={() => handleDeleteKategori(ctgr.id)}>Sil</Button>
+                                    <IconButton onClick={() => handleDeleteKategori(ctgr.id)} size="medium">
+                            <DeleteCircleOutline className='sil-button' />
+                          </IconButton>
                                 </Box>
                             ))}
                             </Box>
@@ -169,7 +174,7 @@ export default function KategorilerModal({ open, setOpen }) {
                     </CardContent>
                     <Box display="flex" justifyContent="space-between">
                         <Button variant="contained" color='success' onClick={handleClose}>Kapat</Button>
-                        <Button variant="contained" onClick={handleSubmit}>Kaydet</Button>
+                        <Button variant="contained" onClick={handleSubmit}>EKLE</Button>
                     </Box>
                 </Card>
             </Modal>

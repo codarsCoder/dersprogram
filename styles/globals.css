@@ -42,3 +42,27 @@ code[class*='language-'] {
   flex-wrap: wrap;
   max-width: 200px;
 }
+
+.sil-button {
+  transition: all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.sil-button:hover  {
+  transform: scale(1.1);
+  color: red;
+
+}
+
+.add-button {
+    background-color: blue;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.add-button:hover  {
+  transform: scale(1.1);
+  background-color: red;
+
+}

@@ -31,6 +31,11 @@ const navigation = () => {
       path: '/dersprogrami'
     },
     {
+      title: 'Programım',
+      icon: ViewCarousel,
+      path: '/dersprogrami/programim'
+    },
+    {
       sectionTitle: 'Pages'
     },
     {

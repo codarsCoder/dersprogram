@@ -1,13 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, Card, CardContent, CardHeader, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { Delete as DeleteIcon, Plus as AddIcon } from 'mdi-material-ui';
+import { DeleteCircleOutline, Plus as AddIcon } from 'mdi-material-ui';
 import useAxios from '../api/axiosWithToken';
 import { useRouter } from 'next/router';
 
 
 import KategorilerModal from './KategorilerModal';
+import { toast } from 'react-toastify';
 
 const daysOfWeek = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+
+const initialSchedule =  {
+  "Pazartesi": [],
+  "Salı": [],
+  "Çarşamba": [],
+  "Perşembe": [],
+  "Cuma": [],
+  "Cumartesi": [],
+  "Pazar": []
+}
+
+
 
 export default function DersProgrami() {
 
@@ -34,7 +47,7 @@ export default function DersProgrami() {
         if (data.status) {
           setCategories(data.data.kategoriler)
         }
-   
+
       } catch (error) {
         console.error(error);
       }
@@ -49,6 +62,8 @@ export default function DersProgrami() {
         });
         if (data.status) {
           setDayInputs(data.data.schedule)
+        } else {
+          defaultSchedule();
         }
 
       } catch (error) {
@@ -62,14 +77,21 @@ export default function DersProgrami() {
   }, [])
 
 
-
-
   const addInput = (day) => {
     setDayInputs({
       ...dayInputs,
       [day]: [...(dayInputs[day] || []), { select: '', input: '' }]
     });
   };
+
+const defaultSchedule = async () => {  //başlangıçta ders programı boş olacağı için günleri ekleyip sıfır bir ders programı kaydettik
+  const { data } = await axiosWithToken.post('', {
+    query: 'insert',
+    service: 'schedule',
+    schedule: JSON.stringify(initialSchedule)
+  });
+
+}
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,13 +102,12 @@ export default function DersProgrami() {
         schedule: JSON.stringify(dayInputs)
       });
       if (data.status) {
-        // router.reload();
+        toast.success("Ders programı kaydedildi.")
       }
       console.log(data)
     } catch (error) {
       console.error(error);
     }
-    console.log(dayInputs);
   };
 
   const removeInput = (day, index) => {
@@ -101,7 +122,7 @@ export default function DersProgrami() {
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
         <CardHeader title="Ders Programı Ekle/Düzenle" />
-      <Grid sx={{ paddingLeft: 5 }}>  <Button variant='contained' color='secondary' startIcon={<AddIcon />} onClick={handleOpen}>Ders Ekle</Button></Grid>
+        <Grid sx={{ paddingLeft: 5 }}>  <Button variant='contained' color='secondary' startIcon={<AddIcon />} onClick={handleOpen}>Ders Ekle</Button></Grid>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <Grid style={{ marginBottom: "20px" }} container spacing={2}>
@@ -151,8 +172,26 @@ export default function DersProgrami() {
                               })
                             }
                           />
-                          <IconButton onClick={() => removeInput(day, index)} size="small">
-                            <DeleteIcon />
+                          <TextField
+                            fullWidth
+                            style={{ minWidth: "200px" }}
+                            size="small"
+                            id={`${day}-${index}-input`}
+                            label="Hedef (soru)"
+                            value={input.input2}
+                            onChange={(e) =>
+                              setDayInputs({
+                                ...dayInputs,
+                                [day]: [
+                                  ...dayInputs[day].slice(0, index),
+                                  { ...input, input2: e.target.value },
+                                  ...dayInputs[day].slice(index + 1)
+                                ]
+                              })
+                            }
+                          />
+                          <IconButton onClick={() => removeInput(day, index)} size="medium">
+                            <DeleteCircleOutline className='sil-button' />
                           </IconButton>
                         </FormControl>
 
@@ -161,12 +200,7 @@ export default function DersProgrami() {
                       <AddIcon
                         onClick={() => addInput(day)}
                         size="small"
-                        style={{
-                          backgroundColor: 'blue',
-                          color: 'white',
-                          borderRadius: '50%',
-                          cursor: 'pointer'
-                        }}
+                        className='add-button'
                       />
                     </td>
                     <Divider></Divider>
@@ -174,7 +208,7 @@ export default function DersProgrami() {
                 ))}
               </table>
             </Grid>
-            <Button type="submit" variant="contained" size="small" color="warning">
+            <Button type="submit" variant="contained" size="small" >
               Kaydet
             </Button>
           </form>
@@ -184,7 +218,7 @@ export default function DersProgrami() {
 
 
       {/* modal */}
-      <KategorilerModal setOpen={setOpen}  open={open} />
+      <KategorilerModal setOpen={setOpen} open={open} setCategories={setCategories} />
 
     </Box>
 
