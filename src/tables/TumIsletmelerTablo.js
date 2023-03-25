@@ -100,7 +100,7 @@ const DashboardTable = () => {
         <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell>Namecccc</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Date</TableCell>
               <TableCell>Salary</TableCell>

@@ -68,10 +68,10 @@ const UserDropdown = () => {
         query: 'select',
         service: 'userlogout',
       }); 
-        if (data.status) {
+
     dispatch(userLogout())
     router.push("/login")
-    }
+    
       console.log(data)
     } catch (error) {
       console.error(error);

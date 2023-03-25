@@ -24,15 +24,11 @@ const navigation = () => {
       icon: AccountCogOutline,
       path: '/account-settings'
     },
+    
     {
-      title: 'İşletmeler',
-      icon: GoogleMyBusiness,
-      path: '/isletmeler'
-    },
-    {
-      title: 'Slider',
+      title: 'Ders Programı',
       icon: ViewCarousel,
-      path: '/slider'
+      path: '/dersprogrami'
     },
     {
       sectionTitle: 'Pages'

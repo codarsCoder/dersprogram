@@ -35,3 +35,10 @@ code[class*='language-'] {
 .isletme-card .MuiDataGrid-toolbarContainer {
   background-color: #f5f5f5;
 }
+
+.schedule-table td {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 200px;
+}
