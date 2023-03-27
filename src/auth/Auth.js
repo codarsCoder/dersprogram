@@ -20,6 +20,7 @@ const Auth = ({children}) => {
         return
       }
       console.log(user.token)
+      
    // kullanıcının maili reduxdan gelmiyorsa anasayfaya at
    if (!user.token) {
      router.push("/login")

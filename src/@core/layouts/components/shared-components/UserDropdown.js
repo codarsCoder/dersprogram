@@ -74,10 +74,12 @@ const UserDropdown = () => {
     
       console.log(data)
     } catch (error) {
+      dispatch(userLogout())
       console.error(error);
     } 
 
  
+   
 
   }
 
