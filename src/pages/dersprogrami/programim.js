@@ -58,7 +58,7 @@ function Programim() {
         "service": "scheduleEntry",
         "dates": dates
       });
-
+console.log(data?.data.kk)
       setEntries(data?.data.scheduleEntry)
     } catch (error) {
 
@@ -144,7 +144,8 @@ function Programim() {
       const { data } = await axiosWithToken.post('', {
         "query": 'insert',
         "service": 'scheduleEntry',
-        "entries": result
+        "entries": result,
+        "dates": dates
       });
 
       toast.success("Soru adetleri eklendi.")

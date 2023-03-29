@@ -95,16 +95,30 @@ export default function DersProgrami() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    //ders programı ekleme sırasına göre günler karışıyor o yüzden yeniden sıraladık
+    const siraliDersProgrami = Object.entries(dayInputs)
+  .sort((a, b) => {
+    const daysOfWeek = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+
+    return daysOfWeek.indexOf(a[0]) - daysOfWeek.indexOf(b[0]);
+  })
+  .reduce((obj, [key, value]) => {
+    obj[key] = value;
+
+    return obj;
+  }, {});
+
     try {
       const { data } = await axiosWithToken.post('', {
         query: 'insert',
         service: 'schedule',
-        schedule: JSON.stringify(dayInputs)
+        schedule: JSON.stringify(siraliDersProgrami)
       });
       if (data.status) {
         toast.success("Ders programı kaydedildi.")
       }
-      console.log(data)
+      console.log(dayInputs)
     } catch (error) {
       console.error(error);
     }

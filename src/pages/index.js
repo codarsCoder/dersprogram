@@ -44,7 +44,17 @@ const Dashboard = () => {
 //  veriçekme hooku
   const { responseData, postData } = useVericek();
 
+  // const result = []; toplam sorular için
 
+  // for (const day in schedule) {
+  //   let totalQuestions = 0;
+  //   schedule[day].forEach((lesson) => {
+  //     totalQuestions += parseInt(lesson.soru);
+  //   });
+  //   result.push({ day: day, totalQuestions: totalQuestions });
+  // }
+  
+  // console.log(result);
 
 
 
