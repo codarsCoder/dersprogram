@@ -75,12 +75,12 @@ export default function DersProgrami() {
 
 
   }, [])
-
+  console.log(dayInputs)
 
   const addInput = (day) => {
     setDayInputs({
       ...dayInputs,
-      [day]: [...(dayInputs[day] || []), { select: '', input: '' }]
+      [day]: [...(dayInputs[day] || []), { ders: '', süre: '', soru: '', sonuc: '' }]
     });
   };
 
@@ -116,6 +116,7 @@ const defaultSchedule = async () => {  //başlangıçta ders programı boş olac
       [day]: dayInputs[day].filter((_, i) => i !== index)
     });
   };
+console.log(dayInputs)
 
   return (
 
@@ -138,14 +139,14 @@ const defaultSchedule = async () => {  //başlangıçta ders programı boş olac
                             size="small"
                             labelId={`${day}-${index}-select-label`}
                             id={`${day}-${index}-select`}
-                            value={input.select}
+                            value={input.ders}
                             label="Ders"
                             onChange={(e) =>
                               setDayInputs({
                                 ...dayInputs,
                                 [day]: [
                                   ...dayInputs[day].slice(0, index),
-                                  { ...input, select: e.target.value },
+                                  { ...input, ders: e.target.value },
                                   ...dayInputs[day].slice(index + 1)
                                 ]
                               })
@@ -160,13 +161,13 @@ const defaultSchedule = async () => {  //başlangıçta ders programı boş olac
                             size="small"
                             id={`${day}-${index}-input`}
                             label="Hedef (dk)"
-                            value={input.input}
+                            value={input.süre}
                             onChange={(e) =>
                               setDayInputs({
                                 ...dayInputs,
                                 [day]: [
                                   ...dayInputs[day].slice(0, index),
-                                  { ...input, input: e.target.value },
+                                  { ...input, süre: e.target.value },
                                   ...dayInputs[day].slice(index + 1)
                                 ]
                               })
@@ -178,13 +179,13 @@ const defaultSchedule = async () => {  //başlangıçta ders programı boş olac
                             size="small"
                             id={`${day}-${index}-input`}
                             label="Hedef (soru)"
-                            value={input.input2}
+                            value={input.soru}
                             onChange={(e) =>
                               setDayInputs({
                                 ...dayInputs,
                                 [day]: [
                                   ...dayInputs[day].slice(0, index),
-                                  { ...input, input2: e.target.value },
+                                  { ...input, soru: e.target.value },
                                   ...dayInputs[day].slice(index + 1)
                                 ]
                               })

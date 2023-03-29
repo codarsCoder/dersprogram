@@ -61,10 +61,10 @@ function Programim() {
                 <TableCell>{day}</TableCell>
                 {schedule[day].map((lesson, index) => (
                 <React.Fragment key={`${day}-${index}`}>
-                    <TableCell> <span>{lesson.select}</span>  </TableCell>
-                    <TableCell>  <Typography >{lesson.input} </Typography> </TableCell>
-                    <TableCell>   <Typography >{lesson.input2} </Typography>  </TableCell>
-                    <TableCell>  <Input onChange={(e) => handleInputChange(e, day, index, 3)} /></TableCell>
+                  <TableCell sx={{display:"flex", flexDirection:"column"}}> 
+                  <span>{lesson.select}</span> 
+                      <Typography >{lesson.input} </Typography> 
+                  <Input onChange={(e) => handleInputChange(e, day, index, 3)} /></TableCell>
                     <TableCell>  < Plus className='add-button' onClick={handleInputChange}/></TableCell>
                 </React.Fragment>
                 ))}
