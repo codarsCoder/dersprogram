@@ -1,9 +1,8 @@
 // ** React Imports
-import { useEffect, useState } from 'react'
+import { useState, Fragment, useRef } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -11,8 +10,8 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
-import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
+import InputLabel from '@mui/material/InputLabel'
 import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
@@ -38,21 +37,15 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
-
-
-import { useDispatch, useSelector } from 'react-redux'
-import { setLoader, userLogin } from 'src/redux/userslice'
-import axios from 'axios'
 import { toast } from 'react-toastify'
-import useAxios from '../api/axiosWithToken'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
 
 // ** Styled Components
-
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
 }))
-
 
 const LinkStyled = styled('a')(({ theme }) => ({
   fontSize: '0.875rem',
@@ -61,40 +54,29 @@ const LinkStyled = styled('a')(({ theme }) => ({
 }))
 
 const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
+  marginTop: theme.spacing(1.5),
+  marginBottom: theme.spacing(4),
   '& .MuiFormControlLabel-label': {
     fontSize: '0.875rem',
     color: theme.palette.text.secondary
   }
 }))
 
-const LoginPage = () => {
-  // ** State
+
+
+const RegisterPage = () => {
+
+  const parolaRef = useRef(null)
+  const router = useRouter()
+
+  // ** States
   const [values, setValues] = useState({
-    email: '',
     password: '',
     showPassword: false
   })
 
-  // REDUX
-  const user = useSelector((state => state.user))
-  const dispatch = useDispatch()
-
-  // EĞER KULLANICI GİRİS YAPMISSA YONLENDİR
-  useEffect(() => {
-    if (user.id) {
-      router.push("/")
-    }
-  }, [user, router])
-
-  useEffect(() => { //loader açıksa kapatmış olalım
-    dispatch(setLoader({ status: false }))
-  }, [])
-  
   // ** Hook
   const theme = useTheme()
-  const router = useRouter()
-
-  const { axiosWithToken } = useAxios();
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -108,40 +90,48 @@ const LoginPage = () => {
     event.preventDefault()
   }
 
-  // LOGİN 
+  // KAYIT 
   const handleSubmit = async (event) => {
 
     event.preventDefault()
 
-    // LOGİN İSTEGİ ATIYORUZ    const { data } = await axiosWithToken.get(`account/${user?.id}/`)
+    if(values.parola === values.parola2){
+          // LOGİN İSTEGİ ATIYORUZ    const { data } = await axiosWithToken.get(`account/${user?.id}/`)
     const { data } = await axios.post("http://localhost/dersprogram/", {
-      "query": "select",
-      "service": "userlogin",
+      "query": "insert",
+      "service": "user",
+      "adi": values.adi,
       "email": values.email,
-      "parola": values.password
+      "parola": values.parola,
+      "telefon": 1
     })
 
     if (data.status) {
 
-      toast.success("Giriş Başarılı!")
+      toast.success("Kayıt Başarılı!")
 
-      // REDUXA İŞLİ YORUZ
-      dispatch(userLogin({id: data.data.email,  mail: data.data.email, token:data.data.Token }))
+
 
       // YÖNLENDİRİYORUZ
-      router.push("/")
+      router.push("/login")
 
     } else {
-        toast.error("Email yada şifre bilgileriniz yanlış!")
+      toast.error("Kayıt Başarılı Olmadı!")
+    }
+
+    } else {
+      toast.error("Girilen parolalar uyuşmuyor!")
+      parolaRef.current.focus()
     }
 
   }
+
 
   return (
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
-        <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Typography
               variant='h6'
               sx={{
@@ -152,23 +142,20 @@ const LoginPage = () => {
                 fontSize: '1.5rem !important'
               }}
             >
-              {themeConfig.templateName}
+              {themeConfig.templateName} Kayıt
             </Typography>
           </Box>
-          <Box sx={{ mb: 6 }}>
-            <Typography variant='h5' sx={{textAlign:"center", fontWeight: 600, marginBottom: 1.5 }}>
-            Giriş
-            </Typography>
-          </Box>
-          <form autoComplete='off' onSubmit={handleSubmit}>
-            <TextField type='email' onChange={handleChange('email')} autoFocus fullWidth id='email' label='Email' sx={{ marginBottom: 4 }} />
+          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+            <TextField autoFocus fullWidth id='ad' label='Adınız - Soyadınız' sx={{ marginBottom: 4 }} onChange={handleChange('adi')} />
+            <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} onChange={handleChange('email')} />
             <FormControl fullWidth>
-              <InputLabel htmlFor='auth-login-password'>Parola</InputLabel>
+              <InputLabel htmlFor='auth-register-password'>Parola</InputLabel>
               <OutlinedInput
-                label='Parola'
-                value={values.password}
-                id='auth-login-password'
-                onChange={handleChange('password')}
+               ref={parolaRef}
+                label='Password'
+                value={values.parola}
+                id='auth-register-password'
+                onChange={handleChange('parola')}
                 type={values.showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
@@ -178,44 +165,60 @@ const LoginPage = () => {
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
-                      {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                      {values.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
                     </IconButton>
                   </InputAdornment>
                 }
               />
             </FormControl>
-            <Box
-              sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
-            >
-              <FormControlLabel control={<Checkbox />} label='Beni hatırla' />
-              <Link passHref href='/'>
-                <LinkStyled onClick={e => e.preventDefault()}>Parolamı unuttum</LinkStyled>
-              </Link>
-            </Box>
-    
-            <Button
-              fullWidth
-              size='large'
-              variant='contained'
-              sx={{ marginBottom: 7 }}
-              type='submit'
-            >
-              GİRİŞ
+            <FormControl sx={{ mt: 4 }} fullWidth>
+              <InputLabel htmlFor='auth-register-password'>Parola Tekrar</InputLabel>
+              <OutlinedInput
+                label='Password'
+                value={values.parola2}
+                id='auth-register-password'
+                onChange={handleChange('parola2')}
+                type={values.showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <IconButton
+                      edge='end'
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      aria-label='toggle password visibility'
+                    >
+                      {values.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7, mt: 4 }} onClick={handleSubmit}>
+              Kayıt Ol
             </Button>
-          </form>
-          <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Typography variant='body2'>
-                <Link passHref href='/register'>
-                  <LinkStyled>Üye değil misiniz?</LinkStyled>
+                <Link passHref href='/login'>
+                  <LinkStyled>Zaten üye misiniz?</LinkStyled>
                 </Link>
               </Typography>
             </Box>
+            <Divider sx={{ my: 5 }}>or</Divider>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Link href='/' passHref>
+                <IconButton component='a' onClick={e => e.preventDefault()}>
+                  <Google sx={{ color: '#db4437' }} />
+                </IconButton>
+              </Link>
+              Google ile giriş yap
+            </Box>
+          </form>
         </CardContent>
       </Card>
-      {/* <FooterIllustrationsV1 /> */}
+      <FooterIllustrationsV1 />
     </Box>
   )
 }
-LoginPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
+RegisterPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
 
-export default LoginPage
+export default RegisterPage

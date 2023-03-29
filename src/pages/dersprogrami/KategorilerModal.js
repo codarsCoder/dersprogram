@@ -145,6 +145,7 @@ export default function KategorilerModal({ open, setOpen, setCategories }) {
                                                         value: e.target.value,
                                                     };
                                                 }
+                                                
                                                 return i;
                                             });
                                             setInputs(updatedInputs);

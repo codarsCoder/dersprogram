@@ -51,18 +51,13 @@ function Programim() {
 
   const getEntries = async () => {
 
-    const headers = {
-      'Content-Type': 'application/json', // request body'nin json formatında olduğunu belirtmek için
-      'Authorization': "d145f1e018c6958987921cd4d1f45d05", // gerekirse authentication token'ı da ekleyebilirsiniz
-      // diğer isteğe bağlı headerlar
-    };
 
     try {
-      const { data } = await axios.post('http://localhost/dersprogram/', {
+      const { data } = await axiosWithToken.post('', {
         "query": "select",
         "service": "scheduleEntry",
         "dates": dates
-      }, { headers });
+      });
 
       setEntries(data?.data.scheduleEntry)
     } catch (error) {
@@ -170,10 +165,10 @@ function Programim() {
             <Grid item xs={12} key={i}>
               <Paper sx={{ p: 2 }}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={1}>
+                  <Grid item xs={12} sm={2}>
                     {!i && (
                       <Typography variant="h6" gutterBottom>
-                        Tarih
+                        Tarih:
                       </Typography>
                     )}
                     <Typography variant="body1">
@@ -183,32 +178,54 @@ function Programim() {
                   <Grid item xs={1} sm={2}>
                     {!i && (
                       <Typography variant="h6" gutterBottom>
-                        Gün
+                        Gün:
                       </Typography>
                     )}
                     <Typography variant="body1">{day}</Typography>
                   </Grid>
                   <Grid item xs={12} sm={6}>            {/* 0.index dışınnda gözükme */}
-                    {!i && (
+                    {/* {!i && (
                       <Typography variant="h6" gutterBottom>
                         Ders / Hedef Süre(dk) / Hedef Soru / Çözülen Soru
                       </Typography>
-                    )}
+                    )} */}
 
                     <Grid container>
                       {schedule[day].map((lesson, index) => (
                         <React.Fragment key={`${day}-${index}`}>
-                          <Grid item xs={4} sm={4}>
+                          <Grid  sx={{borderBottom:"1px solid", mt:2}} item xs={4} sm={4}>
+                            {!index && !i && (
+                              <Typography variant="h6" gutterBottom>
+                                Ders:
+                              </Typography>
+                            )}
                             <Typography variant="body1">{lesson.ders}</Typography>
                           </Grid>
-                          <Grid item xs={4} sm={2}>
+                          <Grid   sx={{borderBottom:"1px solid", mt:2}} item xs={2} sm={2}>
+                            {!index && !i && (
+                              <Typography variant="h6" gutterBottom>
+                                Süre:
+                              </Typography>
+                            )}
                             <Typography variant="body1">{lesson.süre}</Typography>
                           </Grid>
-                          <Grid item xs={4} sm={2}>
+                          <Grid  sx={{borderBottom:"1px solid", mt:2}} item xs={2} sm={2}>
+                            {!index && !i && (
+                              <Typography variant="h6" gutterBottom>
+                                Soru:
+                              </Typography>
+                            )}
                             <Typography variant="body1">{lesson.soru}</Typography>
                           </Grid>
-                          <Grid item xs={12} sm={4}>
+                          <Grid  sx={{borderBottom:"1px solid", mt:1}} item xs={3} sm={3}>
+                            {!index && !i && (
+                              <Typography variant="h6" gutterBottom>
+                                Çözülen:
+                              </Typography>
+                            )}
                             <Input
+                            disableUnderline={true}
+                              sx={{ width: "105px" }}
                               defaultValue={
                                 entries &&
                                 entries?.filter(
@@ -216,7 +233,7 @@ function Programim() {
                                     item.tarih === dates[day] && item.ders === lesson.ders
                                 )[0]?.sonuc
                               }
-                              placeholder="Çözülen adedi giriniz"
+                              placeholder="Çözülen adet"
                               onChange={(e) =>
                                 handleInputChange(e, day, index, dates[day])
                               }
@@ -231,8 +248,9 @@ function Programim() {
               </Paper>
             </Grid>
           ))}
+          
           <Button
-            sx={{ mt: 2 }}
+            sx={{ m: 2, cursor:"pointer !important" }}
             variant="contained"
             onClick={handleSubmit}
             size="small"

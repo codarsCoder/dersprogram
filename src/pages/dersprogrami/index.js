@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 const daysOfWeek = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
 
-const initialSchedule =  {
+const initialSchedule = {
   "Pazartesi": [],
   "Salı": [],
   "Çarşamba": [],
@@ -84,14 +84,14 @@ export default function DersProgrami() {
     });
   };
 
-const defaultSchedule = async () => {  //başlangıçta ders programı boş olacağı için günleri ekleyip sıfır bir ders programı kaydettik
-  const { data } = await axiosWithToken.post('', {
-    query: 'insert',
-    service: 'schedule',
-    schedule: JSON.stringify(initialSchedule)
-  });
+  const defaultSchedule = async () => {  //başlangıçta ders programı boş olacağı için günleri ekleyip sıfır bir ders programı kaydettik
+    const { data } = await axiosWithToken.post('', {
+      query: 'insert',
+      service: 'schedule',
+      schedule: JSON.stringify(initialSchedule)
+    });
 
-}
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -116,7 +116,7 @@ const defaultSchedule = async () => {  //başlangıçta ders programı boş olac
       [day]: dayInputs[day].filter((_, i) => i !== index)
     });
   };
-console.log(dayInputs)
+  console.log(dayInputs)
 
   return (
 

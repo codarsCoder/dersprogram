@@ -19,10 +19,9 @@ const Auth = ({children}) => {
     if (!router.isReady) {
         return
       }
-      console.log(user.token)
       
    // kullanıcının maili reduxdan gelmiyorsa anasayfaya at
-   if (!user.token) {
+   if (!user.token &&  router.pathname !== '/register') {
      router.push("/login")
    } else {
     dispatch(setLoader({status:false})) //preloaderdeki işlemi burada iptal ettik
