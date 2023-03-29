@@ -58,24 +58,24 @@ function Programim() {
     };
 
     try {
-        const { data } = await axios.post('http://localhost/dersprogram/', {
-      "query": "select",
-      "service": "scheduleEntry",
-      "dates": dates
-    }, { headers });
+      const { data } = await axios.post('http://localhost/dersprogram/', {
+        "query": "select",
+        "service": "scheduleEntry",
+        "dates": dates
+      }, { headers });
 
-    setEntries(data?.data.scheduleEntry)
+      setEntries(data?.data.scheduleEntry)
     } catch (error) {
-      
+
     }
-  
+
 
   }
 
   useEffect(() => {
-  
-      getEntries()
-    
+
+    getEntries()
+
   }, [dates])
 
 
@@ -98,7 +98,7 @@ function Programim() {
       }
 
       setDates(dates)
-       getEntries()
+      getEntries()
     }
 
     datem();
@@ -117,7 +117,7 @@ function Programim() {
       updatedSchedule[day][index]["gün"] = day;
 
       //index listedeki yerinide verecektir doğal olarak
-console.log(updatedSchedule)
+      console.log(updatedSchedule)
 
       return updatedSchedule;
     });
@@ -132,17 +132,17 @@ console.log(updatedSchedule)
 
     for (const [day, lessons] of Object.entries(schedule)) {
       for (const lesson of lessons) {
-        if(lesson.sonuc){ //giriş yapılmayan inputları ekleme
-              result.push({
-          ders: lesson.ders,
-          süre: lesson.süre,
-          soru: lesson.soru,
-          sonuc: lesson.sonuc,
-          tarih: lesson.tarih,
-          gün: day
-        });
+        if (lesson.sonuc) { //giriş yapılmayan inputları ekleme
+          result.push({
+            ders: lesson.ders,
+            süre: lesson.süre,
+            soru: lesson.soru,
+            sonuc: lesson.sonuc,
+            tarih: lesson.tarih,
+            gün: day
+          });
         }
-    
+
       }
     }
     try {
@@ -151,10 +151,10 @@ console.log(updatedSchedule)
         "service": 'scheduleEntry',
         "entries": result
       });
-     
-        toast.success("Soru adetleri eklendi.")
-console.log(data)
-      
+
+      toast.success("Soru adetleri eklendi.")
+      console.log(data)
+
     } catch (error) {
       console.error(error);
     }
@@ -164,90 +164,97 @@ console.log(data)
 
   return (
     <>
-{entries ? (
-  <Grid container spacing={2}>
-  {Object.keys(schedule).map((day, i) => (
-    <Grid item xs={12} key={i}>
-      <Paper sx={{ p: 2 }}>
+      {entries ? (
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={3}>
-            <Typography variant="h6" gutterBottom>
-              Tarih
-            </Typography>
-            <Typography variant="body1">
-              {dates[day].split('-').reverse().join('.')}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <Typography variant="h6" gutterBottom>
-              Gün
-            </Typography>
-            <Typography variant="body1">{day}</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="h6" gutterBottom>
-              Ders / Hedef Süre(dk) / Hedef Soru / Çözülen Soru
-            </Typography>
-            <Grid container>
-              {schedule[day].map((lesson, index) => (
-                <React.Fragment key={`${day}-${index}`}>
-                  <Grid item xs={12} sm={4}>
-                    <Typography variant="body1">{lesson.ders}</Typography>
+          {Object.keys(schedule).map((day, i) => (
+            <Grid item xs={12} key={i}>
+              <Paper sx={{ p: 2 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={1}>
+                    {!i && (
+                      <Typography variant="h6" gutterBottom>
+                        Tarih
+                      </Typography>
+                    )}
+                    <Typography variant="body1">
+                      {dates[day].split('-').reverse().join('.')}
+                    </Typography>
                   </Grid>
-                  <Grid item xs={6} sm={2}>
-                    <Typography variant="body1">{lesson.süre}</Typography>
+                  <Grid item xs={1} sm={2}>
+                    {!i && (
+                      <Typography variant="h6" gutterBottom>
+                        Gün
+                      </Typography>
+                    )}
+                    <Typography variant="body1">{day}</Typography>
                   </Grid>
-                  <Grid item xs={6} sm={2}>
-                    <Typography variant="body1">{lesson.soru}</Typography>
+                  <Grid item xs={12} sm={6}>            {/* 0.index dışınnda gözükme */}
+                    {!i && (
+                      <Typography variant="h6" gutterBottom>
+                        Ders / Hedef Süre(dk) / Hedef Soru / Çözülen Soru
+                      </Typography>
+                    )}
+
+                    <Grid container>
+                      {schedule[day].map((lesson, index) => (
+                        <React.Fragment key={`${day}-${index}`}>
+                          <Grid item xs={4} sm={4}>
+                            <Typography variant="body1">{lesson.ders}</Typography>
+                          </Grid>
+                          <Grid item xs={4} sm={2}>
+                            <Typography variant="body1">{lesson.süre}</Typography>
+                          </Grid>
+                          <Grid item xs={4} sm={2}>
+                            <Typography variant="body1">{lesson.soru}</Typography>
+                          </Grid>
+                          <Grid item xs={12} sm={4}>
+                            <Input
+                              defaultValue={
+                                entries &&
+                                entries?.filter(
+                                  (item) =>
+                                    item.tarih === dates[day] && item.ders === lesson.ders
+                                )[0]?.sonuc
+                              }
+                              placeholder="Çözülen adedi giriniz"
+                              onChange={(e) =>
+                                handleInputChange(e, day, index, dates[day])
+                              }
+                            />
+                          </Grid>
+                        </React.Fragment>
+                      ))}
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Input
-                      defaultValue={
-                        entries &&
-                        entries?.filter(
-                          (item) =>
-                            item.tarih === dates[day] && item.ders === lesson.ders
-                        )[0]?.sonuc
-                      }
-                      placeholder="Çözülen adedi giriniz"
-                      onChange={(e) =>
-                        handleInputChange(e, day, index, dates[day])
-                      }
-                    />
-                  </Grid>
-                </React.Fragment>
-              ))}
+                </Grid>
+
+              </Paper>
             </Grid>
-          </Grid>
+          ))}
+          <Button
+            sx={{ mt: 2 }}
+            variant="contained"
+            onClick={handleSubmit}
+            size="small"
+          >
+            Kaydet
+          </Button>
         </Grid>
-      
-      </Paper>
-    </Grid>
-  ))}
-    <Button
-          sx={{ mt: 2 }}
-          variant="contained"
-          onClick={handleSubmit}
-          size="small"
-        >
-          Kaydet
-        </Button>
-</Grid>
 
 
-)
-:
-(
+      )
+        :
+        (
 
-  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-  <CircularProgress />
-</Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress />
+          </Box>
 
-)
+        )
 
 
-}
-</>
+      }
+    </>
 
 
   );
