@@ -13,7 +13,7 @@ const MyTable = () => {
   const monday = new Date(today.setDate(today.getDate() - today.getDay() + 1));
   
   const getEntries = async (dates) => {
-    console.log(dates)
+
 
     const headers = {
         'Content-Type': 'application/json', // request body'nin json formatında olduğunu belirtmek için
@@ -27,7 +27,6 @@ const MyTable = () => {
         "dates": dates
       },  {headers} );
    
-    console.log(data)
       
 
   }

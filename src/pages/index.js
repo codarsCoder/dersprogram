@@ -34,38 +34,9 @@ import Preloader from 'src/components/Preloader'
 import { useState } from 'react'
 import ApexChart from 'src/grafikler/HaftalikTablo'
 import useAxios from './api/axiosWithToken'
-import { Paper } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
 
 
-const defaultEntries = {
-  "hedef": {
-      "Pazartesi": 0,
-      "Salı": 0,
-      "Çarşamba": 0,
-      "Pazar": 0,
-      "Perşembe": 0,
-      "Cuma": 0,
-      "Cumartesi": 0
-  },
-  "sonuc": {
-      "Pazartesi": 0,
-      "Salı": 0,
-      "Çarşamba": 0,
-      "Pazar": 0,
-      "Perşembe": 0,
-      "Cuma": 0,
-      "Cumartesi": 0
-  },
-  "tarih": {
-      "Pazartesi": "0000-00-00",
-      "Salı": "0000-00-00",
-      "Çarşamba": "0000-00-00",
-      "Perşembe": "0000-00-00",
-      "Cuma": "0000-00-00",
-      "Cumartesi": "0000-00-00",
-      "Pazar": "0000-00-00"
-  }
-}
 
 
 
@@ -82,8 +53,7 @@ const Dashboard = () => {
   //  veriçekme hooku
   const { responseData, postData } = useVericek();
 
-  const [dates, setDates] = useState() // gün-tarih listesi o haftanın tarihleri içinde 
-  const [entries, setEntries] = useState(defaultEntries) //mevcut girilmiş soruları çeker
+
 
   // const result = []; toplam sorular için
 
@@ -97,6 +67,41 @@ const Dashboard = () => {
 
   // console.log(result);
 
+  const defaultEntries = {
+    "hedef": {
+        "Pazartesi": 0,
+        "Salı": 0,
+        "Çarşamba": 0,
+        "Pazar": 0,
+        "Perşembe": 0,
+        "Cuma": 0,
+        "Cumartesi": 0
+    },
+    "sonuc": {
+        "Pazartesi": 0,
+        "Salı": 0,
+        "Çarşamba": 0,
+        "Pazar": 0,
+        "Perşembe": 0,
+        "Cuma": 0,
+        "Cumartesi": 0
+    },
+    "tarih": {
+        "Pazartesi": "0000-00-00",
+        "Salı": "0000-00-00",
+        "Çarşamba": "0000-00-00",
+        "Perşembe": "0000-00-00",
+        "Cuma": "0000-00-00",
+        "Cumartesi": "0000-00-00",
+        "Pazar": "0000-00-00"
+    }
+  }
+
+  const [dates, setDates] = useState() // gün-tarih listesi o haftanın tarihleri içinde 
+  const [entries, setEntries] = useState() //mevcut girilmiş soruları çeker
+  const [chartData, setChartData] = useState(defaultEntries);
+  
+  console.log(entries)
   const { axiosWithToken } = useAxios();
 
   //  tüm işletmeleri isteyelim
@@ -169,6 +174,12 @@ for (let i = 0; i < datam.length; i++) {
 
   }, [dates])
 
+  useEffect(() => {
+
+   setChartData(entries)
+
+  }, [entries])
+
 
 
 
@@ -181,11 +192,15 @@ for (let i = 0; i < datam.length; i++) {
         <Grid item xs={12} md={8}>
           <StatisticsCard />
         </Grid> */}
-        {entries &&
+        {chartData ?
           (
             <Grid   item xs={12} >
-              <ApexChart  entries={entries} />
+              <ApexChart  chartData={chartData} />
             </Grid>
+          )
+          :
+          (
+            <Typography>Veri girilmediği için Grafik şuanda gösterilemiyor</Typography>
           )
         }
 

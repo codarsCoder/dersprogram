@@ -39,7 +39,6 @@ function Programim() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(schedule);
   };
 
   return (

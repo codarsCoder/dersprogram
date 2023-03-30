@@ -11,7 +11,7 @@ export const axiosPublic = axios.create({
   baseURL: BASE_URL,
 });
 
-const useAxios = () => {
+const useAxios =  () => {
 
   const router = useRouter()
 
@@ -26,7 +26,7 @@ const useAxios = () => {
 
     //* Axios Instance for Private API Request
 
-    axiosWithToken = axios.create({
+    axiosWithToken =  axios.create({
       baseURL: BASE_URL,
       headers: { Authorization: token },
     });

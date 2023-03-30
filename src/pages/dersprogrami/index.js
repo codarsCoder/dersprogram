@@ -122,7 +122,7 @@ export default function DersProgrami() {
       if (data.status) {
         toast.success("Ders programı kaydedildi.")
       }
-      console.log(dayInputs)
+
     } catch (error) {
       console.error(error);
     }
@@ -134,7 +134,7 @@ export default function DersProgrami() {
       [day]: dayInputs[day].filter((_, i) => i !== index)
     });
   };
-  console.log(dayInputs)
+
 
   return (
 

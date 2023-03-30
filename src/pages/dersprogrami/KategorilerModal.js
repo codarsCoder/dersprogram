@@ -59,7 +59,7 @@ export default function KategorilerModal({ open, setOpen, setCategories }) {
                 if (data.status) {
                     setCategoriesC(data.data.kategoriler)
                 }
-                console.log(data)
+
             } catch (error) {
                 console.error(error);
             }
@@ -86,7 +86,7 @@ export default function KategorilerModal({ open, setOpen, setCategories }) {
                 setInputs([])
               
             }
-            console.log(data)
+
         } catch (error) {
             console.error(error);
         }
@@ -107,7 +107,7 @@ export default function KategorilerModal({ open, setOpen, setCategories }) {
                 setCategoriesC(data.data.kategoriler)
                 setCategories(data.data.kategoriler)
             }
-            console.log(data)
+
         } catch (error) {
             console.error(error);
         }

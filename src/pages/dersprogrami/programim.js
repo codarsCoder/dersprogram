@@ -26,6 +26,29 @@ function Programim() {
 
     return year + '-' + month + '-' + day;
   }
+
+  const getDefaultEntries = () => {
+    console.log("default çalıştı")
+    let output = [];
+
+    for (let gun in schedule) {
+      for (let ders of schedule[gun]) {
+        let item = {
+          "tarih": dates[gun],
+          "gün": gun,
+          "ders": ders["ders"],
+          "hedef_süre": ders["süre"],
+          "hedef_adet": ders["soru"],
+          "sonuc": ders["sonuc"]
+        };
+        output.push(item);
+      }
+    }
+    console.log(output)
+    setEntries(output)
+  }
+
+
   useEffect(() => {
 
     const getSchedule = async () => {
@@ -42,27 +65,54 @@ function Programim() {
         console.error(error);
       }
     }
+    console.log("sc hazır")
     getSchedule()
-
-
-
 
   }, []);
 
+  console.log(schedule)
+  console.log(dates)
+
   const getEntries = async () => {
 
-
-    try {
+if(dates){
       const { data } = await axiosWithToken.post('', {
-        "query": "select",
-        "service": "scheduleEntry",
-        "dates": dates
-      });
-console.log(data?.data.kk)
+      "query": "select",
+      "service": "scheduleEntry",
+      "dates": dates
+    });
+    console.log(data.data.entry)
+    if (data.data.entry === 3) {
+      console.log("firsttttt")
       setEntries(data?.data.scheduleEntry)
-    } catch (error) {
+      console.log(data?.data.scheduleEntry)
 
+    } else if (data.data.entry === 2) {
+      console.log("first")
+      let output = [];
+
+      for (let gun in schedule) {
+        for (let ders of schedule[gun]) {
+          let item = {
+            "tarih": dates[gun],
+            "gün": gun,
+            "ders": ders["ders"],
+            "hedef_süre": ders["süre"],
+            "hedef_adet": ders["soru"],
+            "sonuc": ders["sonuc"]
+          };
+          output.push(item);
+        }
+      }
+      console.log(output)
+      setEntries(output)
+    } else {
+      console.log("yok gardaş")
     }
+
+
+}
+
 
 
   }
@@ -112,12 +162,13 @@ console.log(data?.data.kk)
       updatedSchedule[day][index]["gün"] = day;
 
       //index listedeki yerinide verecektir doğal olarak
-      console.log(updatedSchedule)
 
       return updatedSchedule;
     });
 
   };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -149,7 +200,6 @@ console.log(data?.data.kk)
       });
 
       toast.success("Soru adetleri eklendi.")
-      console.log(data)
 
     } catch (error) {
       console.error(error);
@@ -194,7 +244,7 @@ console.log(data?.data.kk)
                     <Grid container>
                       {schedule[day].map((lesson, index) => (
                         <React.Fragment key={`${day}-${index}`}>
-                          <Grid  sx={{borderBottom:"1px solid", mt:2}} item xs={4} sm={4}>
+                          <Grid sx={{ borderBottom: "1px solid", mt: 2 }} item xs={4} sm={4}>
                             {!index && !i && (
                               <Typography variant="h6" gutterBottom>
                                 Ders:
@@ -202,7 +252,7 @@ console.log(data?.data.kk)
                             )}
                             <Typography variant="body1">{lesson.ders}</Typography>
                           </Grid>
-                          <Grid   sx={{borderBottom:"1px solid", mt:2}} item xs={2} sm={2}>
+                          <Grid sx={{ borderBottom: "1px solid", mt: 2 }} item xs={2} sm={2}>
                             {!index && !i && (
                               <Typography variant="h6" gutterBottom>
                                 Süre:
@@ -210,7 +260,7 @@ console.log(data?.data.kk)
                             )}
                             <Typography variant="body1">{lesson.süre}</Typography>
                           </Grid>
-                          <Grid  sx={{borderBottom:"1px solid", mt:2}} item xs={2} sm={2}>
+                          <Grid sx={{ borderBottom: "1px solid", mt: 2 }} item xs={2} sm={2}>
                             {!index && !i && (
                               <Typography variant="h6" gutterBottom>
                                 Soru:
@@ -218,14 +268,14 @@ console.log(data?.data.kk)
                             )}
                             <Typography variant="body1">{lesson.soru}</Typography>
                           </Grid>
-                          <Grid  sx={{borderBottom:"1px solid", mt:1}} item xs={3} sm={3}>
+                          <Grid sx={{ borderBottom: "1px solid", mt: 1 }} item xs={3} sm={3}>
                             {!index && !i && (
                               <Typography variant="h6" gutterBottom>
                                 Çözülen:
                               </Typography>
                             )}
                             <Input
-                            disableUnderline={true}
+                              disableUnderline={true}
                               sx={{ width: "105px" }}
                               defaultValue={
                                 entries &&
@@ -249,9 +299,9 @@ console.log(data?.data.kk)
               </Paper>
             </Grid>
           ))}
-          
+
           <Button
-            sx={{ m: 2, cursor:"pointer !important" }}
+            sx={{ m: 2, cursor: "pointer !important" }}
             variant="contained"
             onClick={handleSubmit}
             size="small"

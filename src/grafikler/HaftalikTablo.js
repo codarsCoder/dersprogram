@@ -4,20 +4,19 @@ import ReactApexcharts from 'src/@core/components/react-apexcharts';
 import paper from 'src/@core/theme/overrides/paper';
 
 
-const ApexChart = ({ entries }) => {
-    console.log(entries)
-    
+const ApexChart = ({ chartData }) => {
+
     const [series] = useState([
         {
             name: 'Mevcut',
             data: [
                 {
                     x: 'Pazartesi',
-                    y: entries.sonuc["Pazartesi"],
+                    y: chartData?.sonuc["Pazartesi"],
                     goals: [
                         {
                             name: 'Hedef',
-                            value: entries.hedef["Pazartesi"],
+                            value: chartData?.hedef["Pazartesi"],
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -25,11 +24,11 @@ const ApexChart = ({ entries }) => {
                 },
                 {
                     x: 'Salı',
-                    y: entries.sonuc["Salı"],
+                    y: chartData?.sonuc["Salı"],
                     goals: [
                         {
                             name: 'Hedef',
-                            value: entries.hedef["Salı"],
+                            value: chartData?.hedef["Salı"],
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -37,11 +36,11 @@ const ApexChart = ({ entries }) => {
                 },
                 {
                     x: 'Çarşamba',
-                    y: entries.sonuc["Çarşamba"],
+                    y: chartData?.sonuc["Çarşamba"],
                     goals: [
                         {
                             name: 'Hedef',
-                            value: entries.hedef["Çarşamba"],
+                            value: chartData?.hedef["Çarşamba"],
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -49,11 +48,11 @@ const ApexChart = ({ entries }) => {
                 },
                 {
                     x: 'Perşembe',
-                    y: entries.sonuc["Perşembe"],
+                    y: chartData?.sonuc["Perşembe"],
                     goals: [
                         {
                             name: 'Hedef',
-                            value: entries.hedef["Perşembe"],
+                            value: chartData?.hedef["Perşembe"],
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -61,11 +60,11 @@ const ApexChart = ({ entries }) => {
                 },
                 {
                     x: 'Cuma',
-                    y: entries.sonuc["Cuma"],
+                    y: chartData?.sonuc["Cuma"],
                     goals: [
                         {
                             name: 'Hedef',
-                            value: entries.hedef["Cuma"],
+                            value: chartData?.hedef["Cuma"],
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -73,11 +72,11 @@ const ApexChart = ({ entries }) => {
                 },
                 {
                     x: 'Cumartesi',
-                    y: entries.sonuc["Cumartesi"],
+                    y: chartData?.sonuc["Cumartesi"],
                     goals: [
                         {
                             name: 'Hedef',
-                            value: entries.hedef["Cumartesi"],
+                            value: chartData?.hedef["Cumartesi"],
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -85,11 +84,11 @@ const ApexChart = ({ entries }) => {
                 },
                 {
                     x: 'Pazar',
-                    y: entries.sonuc["Pazar"],
+                    y: chartData?.sonuc["Pazar"],
                     goals: [
                         {
                             name: 'Hedef',
-                            value: entries.hedef["Pazar"],
+                            value: chartData?.hedef["Pazar"],
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -131,7 +130,7 @@ const ApexChart = ({ entries }) => {
     return (
         <Box component={Paper} id="chart">
             <Typography variant='h5' sx={{textAlign:"center",paddingTop:"20px" }}>Haftalık Hedef-Sonuç Tablosu </Typography>
-            <Typography variant='h6' sx={{textAlign:"center",paddingTop:"20px" }}> {`${(entries.tarih["Pazartesi"].split("-").reverse().join("."))} - ${(entries.tarih["Pazar"].split("-").reverse().join("."))}`}</Typography>
+            <Typography variant='h6' sx={{textAlign:"center",paddingTop:"20px" }}> {`${(chartData?.tarih["Pazartesi"].split("-").reverse().join("."))} - ${(chartData?.tarih["Pazar"].split("-").reverse().join("."))}`}</Typography>
           
             <ReactApexcharts options={options} series={series} type="bar" height={350} />
         </Box>

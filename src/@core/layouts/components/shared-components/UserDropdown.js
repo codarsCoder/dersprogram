@@ -78,7 +78,7 @@ const UserDropdown = () => {
     dispatch(userLogout())
     router.push("/login")
     
-      console.log(data)
+
     } catch (error) {
       dispatch(userLogout())
       console.error(error);
@@ -148,7 +148,7 @@ const UserDropdown = () => {
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose("/hesap")}>
           <Box sx={styles}>
             <AccountOutline sx={{ marginRight: 2 }} />
-            Hesap ayarları
+            Hesap Ayarları
           </Box>
         </MenuItem>
         <Divider />
