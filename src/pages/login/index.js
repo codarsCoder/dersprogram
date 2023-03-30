@@ -126,7 +126,7 @@ const LoginPage = () => {
       toast.success("Giriş Başarılı!")
 
       // REDUXA İŞLİ YORUZ
-      dispatch(userLogin({id: data.data.email,  mail: data.data.email, token:data.data.Token }))
+      dispatch(userLogin({id: data.data.email,  mail: data.data.email, adi:data.data.adi, token:data.data.Token, statu:data.data.statu  }))
 
       // YÖNLENDİRİYORUZ
       router.push("/")

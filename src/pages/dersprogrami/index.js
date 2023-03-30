@@ -75,7 +75,11 @@ export default function DersProgrami() {
 
 
   }, [])
-  console.log(dayInputs)
+ 
+
+
+
+
 
   const addInput = (day) => {
     setDayInputs({

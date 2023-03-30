@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -16,12 +16,13 @@ import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
 import InformationOutline from 'mdi-material-ui/InformationOutline'
 
 // ** Demo Tabs Imports
-import TabInfo from 'src/views/account-settings/TabInfo'
-import TabAccount from 'src/views/account-settings/TabAccount'
-import TabSecurity from 'src/views/account-settings/TabSecurity'
+import TabInfo from './TabInfo'
+import TabAccount from './TabAccount'
+import TabSecurity from './TabSecurity'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
+import useAxios from '../api/axiosWithToken'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -42,12 +43,39 @@ const TabName = styled('span')(({ theme }) => ({
 }))
 
 const AccountSettings = () => {
+
   // ** State
   const [value, setValue] = useState('account')
+  const [user, setUser] = useState()
+
+  const { axiosWithToken } = useAxios();
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+
+  useEffect(() => {
+
+
+    const getUser = async () => {
+      try {
+        const { data } = await axiosWithToken.post('', {
+          query: 'select',
+          service: 'userget'
+        });
+        if (data.status) {
+          setUser(data.data.user)
+        }
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getUser();
+  }, [])
+
+
+
 
   return (
     <Card>
@@ -62,7 +90,7 @@ const AccountSettings = () => {
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <AccountOutline />
-                <TabName>Account</TabName>
+                <TabName>Hesap</TabName>
               </Box>
             }
           />
@@ -71,11 +99,11 @@ const AccountSettings = () => {
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <LockOpenOutline />
-                <TabName>Security</TabName>
+                <TabName>Güvenlik</TabName>
               </Box>
             }
           />
-          <Tab
+          {/* <Tab
             value='info'
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -83,17 +111,18 @@ const AccountSettings = () => {
                 <TabName>Info</TabName>
               </Box>
             }
-          />
+          /> */}
         </TabList>
 
-        <TabPanel sx={{ p: 0 }} value='account'>
-          <TabAccount />
-        </TabPanel>
+        {user &&
+          (
+            <TabPanel sx={{ p: 0 }} value='account'>
+              <TabAccount user={user} />
+            </TabPanel>
+          )
+        }
         <TabPanel sx={{ p: 0 }} value='security'>
           <TabSecurity />
-        </TabPanel>
-        <TabPanel sx={{ p: 0 }} value='info'>
-          <TabInfo />
         </TabPanel>
       </TabContext>
     </Card>

@@ -32,17 +32,58 @@ import CardHeader from '@mui/material/CardHeader'
 import RolesTable from 'src/tables/roles'
 import Preloader from 'src/components/Preloader'
 import { useState } from 'react'
+import ApexChart from 'src/grafikler/HaftalikTablo'
+import useAxios from './api/axiosWithToken'
+import { Paper } from '@mui/material'
+
+
+const defaultEntries = {
+  "hedef": {
+      "Pazartesi": 0,
+      "Salı": 0,
+      "Çarşamba": 0,
+      "Pazar": 0,
+      "Perşembe": 0,
+      "Cuma": 0,
+      "Cumartesi": 0
+  },
+  "sonuc": {
+      "Pazartesi": 0,
+      "Salı": 0,
+      "Çarşamba": 0,
+      "Pazar": 0,
+      "Perşembe": 0,
+      "Cuma": 0,
+      "Cumartesi": 0
+  },
+  "tarih": {
+      "Pazartesi": "0000-00-00",
+      "Salı": "0000-00-00",
+      "Çarşamba": "0000-00-00",
+      "Perşembe": "0000-00-00",
+      "Cuma": "0000-00-00",
+      "Cumartesi": "0000-00-00",
+      "Pazar": "0000-00-00"
+  }
+}
+
+
+
+
 
 const Dashboard = () => {
 
   // router tanımla 
   const router = useRouter()
 
-   // redux tan user al 
+  // redux tan user al 
   const user = useSelector((state => state.user))
-  
-//  veriçekme hooku
+
+  //  veriçekme hooku
   const { responseData, postData } = useVericek();
+
+  const [dates, setDates] = useState() // gün-tarih listesi o haftanın tarihleri içinde 
+  const [entries, setEntries] = useState(defaultEntries) //mevcut girilmiş soruları çeker
 
   // const result = []; toplam sorular için
 
@@ -53,30 +94,102 @@ const Dashboard = () => {
   //   });
   //   result.push({ day: day, totalQuestions: totalQuestions });
   // }
-  
+
   // console.log(result);
 
-
+  const { axiosWithToken } = useAxios();
 
   //  tüm işletmeleri isteyelim
   useEffect(() => {
     postData({
-      "query" : "select",
-      "service" : "all_shop" 
-  })
+      "query": "select",
+      "service": "all_shop"
+    })
   }, [])
+
+  useEffect(() => { // bu haftanın tarihlerini hesaplayacak
+
+    const daysOfWeek = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+
+    const today = new Date();
+
+    // Bu haftanın başlangıç tarihini hesaplayın
+    const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1);
+
+    // Tablodaki tarihlerin saklanacağı bir dizi oluşturun
+    const dates = {};
+
+    // Her bir günün karşısına o günün tarihini yazdırın
+    for (let i = 0; i < daysOfWeek.length; i++) {
+      const date = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + i);
+      const formattedDate = date.toLocaleDateString('tr-TR').split('.').reverse().join('-');
+      dates[daysOfWeek[i]] = formattedDate;
+      setDates(dates)
+    }
+  }, [])
+
+  const getEntries = async () => { //bu haftanın ders girişlerini alacak
+
+    try {
+      const { data } = await axiosWithToken.post('', {
+        "query": "select",
+        "service": "scheduleEntry",
+        "dates": dates
+      });
+      
+//toplam hedefler hesaplanıyor
+const datam =data?.data.scheduleEntry
+let totalHedefAdet = {};
+let totalSonuc = {};
+
+for (let i = 0; i < datam.length; i++) {
+    let item = datam[i];
+    let date = item.gün;
+    if (date in totalHedefAdet) {
+        totalHedefAdet[date] += parseInt(item.hedef_adet);
+        totalSonuc[date] += parseInt(item.sonuc);
+    } else {
+        totalHedefAdet[date] = parseInt(item.hedef_adet);
+        totalSonuc[date] = parseInt(item.sonuc);
+    }
+}
+
+
+
+      setEntries({"hedef":totalHedefAdet,"sonuc":totalSonuc,"tarih":dates})
+    } catch (error) {
+
+    }
+
+  }
+
+  useEffect(() => {
+
+    getEntries()
+
+  }, [dates])
+
+
 
 
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
-        <Grid item xs={12} md={4}>
+        {/* <Grid item xs={12} md={4}>
           <Trophy />
         </Grid>
         <Grid item xs={12} md={8}>
           <StatisticsCard />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
+        </Grid> */}
+        {entries &&
+          (
+            <Grid   item xs={12} >
+              <ApexChart  entries={entries} />
+            </Grid>
+          )
+        }
+
+        {/* <Grid item xs={12} md={6} lg={4}>
           <WeeklyOverview />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
@@ -135,17 +248,17 @@ const Dashboard = () => {
           <DepositWithdraw />
         </Grid>
         <Grid item xs={12}>
-        <Card>
-          <CardHeader title='Tüm İşletmeler' titleTypographyProps={{ variant: 'h6' }} />
-          { responseData && <TumIsletmelerCollapseTable responseData = {responseData} />}
-        </Card>
-      </Grid>
+          <Card>
+            <CardHeader title='Tüm İşletmeler' titleTypographyProps={{ variant: 'h6' }} />
+            {responseData && <TumIsletmelerCollapseTable responseData={responseData} />}
+          </Card>
+        </Grid>
         <Grid item xs={12}>
-        <RolesTable />
+          <RolesTable />
         </Grid>
         <Grid item xs={12}>
           <TumIsletmelerTablo />
-        </Grid>
+        </Grid> */}
       </Grid>
     </ApexChartWrapper>
   )

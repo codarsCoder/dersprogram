@@ -6,7 +6,9 @@ export const userSlice = createSlice({
     initialState: {
         id: "",
         mail: "",
+        adi: "",
         token: "",
+        statu: "",
         preLoader:true,
     },
     reducers: {
@@ -15,7 +17,9 @@ export const userSlice = createSlice({
         userLogin: (state, { payload }) => {
             state.id = payload.id,
             state.mail = payload.mail,
-            state.token = payload.token
+            state.adi = payload.adi,
+            state.token = payload.token,
+            state.statu = payload.statu
         },
 
         // kullanıcı kayıtında kullanılacak aksiyon
@@ -32,7 +36,7 @@ export const userSlice = createSlice({
 
         // kullanıcı çıkış yaptıgında initial state e geri döndügümüz aksiyon
         userLogout: (state) => {
-            state.id =  state.token = state.mail = ""
+            state.id =  state.token = state.mail = state.adi = state.statu = ""
         },
 
         setLoader: (state, { payload }) => {
