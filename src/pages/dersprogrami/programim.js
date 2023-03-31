@@ -138,7 +138,7 @@ if(dates){
       // Her bir günün karşısına o günün tarihini yazdırın
       for (let i = 0; i < daysOfWeek.length; i++) {
         const date = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + i);
-        const formattedDate = date.toLocaleDateString('tr-TR').split('.').reverse().join('-');
+        const formattedDate = date?.toLocaleDateString('tr-TR').split('.').reverse().join('-');
         dates[daysOfWeek[i]] = formattedDate;
       }
 
@@ -223,7 +223,7 @@ if(dates){
                       </Typography>
                     )}
                     <Typography variant="body1">
-                      {dates[day].split('-').reverse().join('.')}
+                      {dates?.[day].split('-').reverse().join('.')}
                     </Typography>
                   </Grid>
                   <Grid item xs={1} sm={2}>
