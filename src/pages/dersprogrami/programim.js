@@ -81,13 +81,13 @@ if(dates){
       "service": "scheduleEntry",
       "dates": dates
     });
-    console.log(data.data.entry)
-    if (data.data.entry === 3) {
+    // console.log(data?.data.entry)
+    if (data.data?.entry === 3) {
       console.log("firsttttt")
       setEntries(data?.data.scheduleEntry)
       console.log(data?.data.scheduleEntry)
 
-    } else if (data.data.entry === 2) {
+    } else if (data.data?.entry === 2) {
       console.log("first")
       let output = [];
 
@@ -107,7 +107,7 @@ if(dates){
       console.log(output)
       setEntries(output)
     } else {
-      console.log("yok gardaş")
+
     }
 
 
@@ -138,7 +138,7 @@ if(dates){
       // Her bir günün karşısına o günün tarihini yazdırın
       for (let i = 0; i < daysOfWeek.length; i++) {
         const date = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + i);
-        const formattedDate = date?.toLocaleDateString('tr-TR').split('.').reverse().join('-');
+        const formattedDate = date.toLocaleDateString('tr-TR').split('.').reverse().join('-');
         dates[daysOfWeek[i]] = formattedDate;
       }
 
