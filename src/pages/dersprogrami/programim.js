@@ -223,7 +223,7 @@ if(dates){
                       </Typography>
                     )}
                     <Typography variant="body1">
-                      {dates?.[day].split('-').reverse().join('.')}
+                      {dates?.[day]?.split('-').reverse().join('.')}
                     </Typography>
                   </Grid>
                   <Grid item xs={1} sm={2}>

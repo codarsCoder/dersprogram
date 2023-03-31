@@ -101,6 +101,7 @@ const ApexChart = ({ chartData }) => {
 
     const [options] = useState({
         chart: {
+            textAlign:"center",
             height: 350,
             type: 'bar',
             toolbar: {
@@ -116,6 +117,7 @@ const ApexChart = ({ chartData }) => {
         colors: ['#FFB400'],
         dataLabels: {
             enabled: true,
+
         },
         legend: {
             show: true,
@@ -132,7 +134,7 @@ const ApexChart = ({ chartData }) => {
             <Typography variant='h5' sx={{textAlign:"center",paddingTop:"20px" }}>Haftalık Hedef-Sonuç Tablosu </Typography>
             <Typography variant='h6' sx={{textAlign:"center",paddingTop:"20px" }}> {`${(chartData?.tarih["Pazartesi"].split("-").reverse().join("."))} - ${(chartData?.tarih["Pazar"].split("-").reverse().join("."))}`}</Typography>
           
-            <ReactApexcharts options={options} series={series} type="bar" height={350} />
+            <ReactApexcharts  options={options} series={series} type="bar" height={350} />
         </Box>
     );
 };

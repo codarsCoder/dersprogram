@@ -194,7 +194,7 @@ for (let i = 0; i < datam.length; i++) {
         </Grid> */}
         {chartData ?
           (
-            <Grid   item xs={12} >
+            <Grid   item xs={12} md={6} >
               <ApexChart  chartData={chartData} />
             </Grid>
           )

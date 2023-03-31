@@ -70,8 +70,8 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 const LoginPage = () => {
   // ** State
   const [values, setValues] = useState({
-    email: '',
-    password: '',
+    email: 'admin@admin.com',
+    password: '123',
     showPassword: false
   })
 
