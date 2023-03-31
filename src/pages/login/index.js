@@ -161,7 +161,7 @@ const LoginPage = () => {
             </Typography>
           </Box>
           <form autoComplete='off' onSubmit={handleSubmit}>
-            <TextField type='email' onChange={handleChange('email')} autoFocus fullWidth id='email' label='Email' sx={{ marginBottom: 4 }} />
+            <TextField value={values.email} type='email' onChange={handleChange('email')} autoFocus fullWidth id='email' label='Email' sx={{ marginBottom: 4 }} />
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-login-password'>Parola</InputLabel>
               <OutlinedInput
