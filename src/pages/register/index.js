@@ -97,7 +97,7 @@ const RegisterPage = () => {
 
     if(values.parola === values.parola2){
           // LOGİN İSTEGİ ATIYORUZ    const { data } = await axiosWithToken.get(`account/${user?.id}/`)
-    const { data } = await axios.post("http://localhost/dersprogram/", {
+    const { data } = await axios.post("https://codarscoder.tk/dersprogrami/", {
       "query": "insert",
       "service": "user",
       "adi": values.adi,

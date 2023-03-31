@@ -21,7 +21,7 @@ const MyTable = () => {
         // diğer isteğe bağlı headerlar
       };
 
-      const { data } = await axios.post('http://localhost/dersprogram/', {
+      const { data } = await axios.post('https://codarscoder.tk/dersprogrami/', {
         "query" : "select",
         "service" : "scheduleEntry",
         "dates": dates

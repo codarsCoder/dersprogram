@@ -3,8 +3,9 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
+// http://localhost/dersprogram/
 
-const BASE_URL = "http://localhost/dersprogram/";
+const BASE_URL = "https://codarscoder.tk/dersprogrami/";
 
 //* Axios Instance for Public API Request
 export const axiosPublic = axios.create({

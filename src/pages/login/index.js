@@ -114,7 +114,7 @@ const LoginPage = () => {
     event.preventDefault()
 
     // LOGİN İSTEGİ ATIYORUZ    const { data } = await axiosWithToken.get(`account/${user?.id}/`)
-    const { data } = await axios.post("http://localhost/dersprogram/", {
+    const { data } = await axios.post("https://codarscoder.tk/dersprogrami/", {
       "query": "select",
       "service": "userlogin",
       "email": values.email,
