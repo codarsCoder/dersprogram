@@ -101,7 +101,7 @@ const ApexChart = ({ chartData }) => {
 
     const [options] = useState({
         chart: {
-            textAlign:"center",
+            textAlign: "center",
             height: 350,
             type: 'bar',
             toolbar: {
@@ -111,7 +111,7 @@ const ApexChart = ({ chartData }) => {
 
         plotOptions: {
             bar: {
-                columnWidth: '20%',
+                columnWidth: '60%',
             },
         },
         colors: ['#FFB400'],
@@ -131,10 +131,15 @@ const ApexChart = ({ chartData }) => {
 
     return (
         <Box component={Paper} id="chart">
-            <Typography variant='h5' sx={{textAlign:"center",paddingTop:"20px" }}>Haftalık Hedef-Sonuç Tablosu </Typography>
-            <Typography variant='h6' sx={{textAlign:"center",paddingTop:"20px" }}> {`${(chartData?.tarih["Pazartesi"].split("-").reverse().join("."))} - ${(chartData?.tarih["Pazar"].split("-").reverse().join("."))}`}</Typography>
-          
-            <ReactApexcharts  options={options} series={series} type="bar" height={350} />
+            <Typography variant='h5' sx={{ textAlign: "center", paddingTop: "20px" }}>Haftalık Hedef-Sonuç Tablosu </Typography>
+            {chartData?.tarih &&
+                (
+
+                    <Typography variant='h6' sx={{ textAlign: "center", paddingTop: "20px" }}> {`${(chartData?.tarih["Pazartesi"].split("-").reverse().join("."))} - ${(chartData?.tarih["Pazar"].split("-").reverse().join("."))}`}</Typography>
+                )
+            }
+
+            <ReactApexcharts options={options} series={series} type="bar" height={350} />
         </Box>
     );
 };

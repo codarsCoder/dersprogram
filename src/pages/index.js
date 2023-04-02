@@ -101,7 +101,7 @@ const Dashboard = () => {
   const [entries, setEntries] = useState() //mevcut girilmiş soruları çeker
   const [chartData, setChartData] = useState(defaultEntries);
   
-  console.log(entries)
+
   const { axiosWithToken } = useAxios();
 
   //  tüm işletmeleri isteyelim
@@ -117,13 +117,16 @@ const Dashboard = () => {
     const daysOfWeek = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
 
     const today = new Date();
-
+    
     // Bu haftanın başlangıç tarihini hesaplayın
-    const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1);
-
+    const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1));
+  
+    // Bu haftanın son tarihini hesaplayın
+    const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 7);
+  
     // Tablodaki tarihlerin saklanacağı bir dizi oluşturun
     const dates = {};
-
+  
     // Her bir günün karşısına o günün tarihini yazdırın
     for (let i = 0; i < daysOfWeek.length; i++) {
       const date = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + i);

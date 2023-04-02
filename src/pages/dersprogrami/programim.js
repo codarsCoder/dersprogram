@@ -128,23 +128,29 @@ if(dates){
 
     const datem = async () => {
       const today = new Date();
-
+    
       // Bu haftanın başlangıç tarihini hesaplayın
-      const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1);
-
+      const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1));
+    
+      // Bu haftanın son tarihini hesaplayın
+      const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 7);
+    
       // Tablodaki tarihlerin saklanacağı bir dizi oluşturun
       const dates = {};
-
+    
       // Her bir günün karşısına o günün tarihini yazdırın
       for (let i = 0; i < daysOfWeek.length; i++) {
         const date = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + i);
         const formattedDate = date.toLocaleDateString('tr-TR').split('.').reverse().join('-');
         dates[daysOfWeek[i]] = formattedDate;
       }
-
+    
       setDates(dates)
       getEntries()
     }
+    
+    
+    
 
     datem();
 
