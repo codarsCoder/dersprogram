@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid'
 import ApexChart from 'src/grafikler/HaftalikTablo';
 import { Typography } from '@mui/material'
 
-const kullanicilar = () => {
+const Kullanicilar = () => {
 
     const [users, setUsers] = useState()
     const [selectedUser, setSelectedUser] = useState("");
@@ -39,6 +39,7 @@ const kullanicilar = () => {
     topla(filteredResults)
   };
 console.log(results)
+
     const user = useSelector((state) => state.user);
 
     const router = useRouter();
@@ -46,7 +47,9 @@ console.log(results)
     if(user.statu !== 2){
         router.push("/")
     }
+
 console.log(users)
+
 const { axiosWithToken } = useAxios();
 
 const topla = (datam)=> {
@@ -139,4 +142,4 @@ useEffect(() => {
   )
 }
 
-export default kullanicilar
+export default Kullanicilar
