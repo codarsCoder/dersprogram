@@ -75,7 +75,7 @@ export default function DersProgrami() {
 
 
   }, [])
- 
+
 
 
 
@@ -84,7 +84,7 @@ export default function DersProgrami() {
   const addInput = (day) => {
     setDayInputs({
       ...dayInputs,
-      [day]: [...(dayInputs[day] || []), { ders: '', süre: '', soru: '', sonuc: '' }]
+      [day]: [...(dayInputs[day] || []), { ders: '', konu: '', süre: '', soru: '', sonuc: '',tarih:'' }]
     });
   };
 
@@ -102,16 +102,16 @@ export default function DersProgrami() {
 
     //ders programı ekleme sırasına göre günler karışıyor o yüzden yeniden sıraladık
     const siraliDersProgrami = Object.entries(dayInputs)
-  .sort((a, b) => {
-    const daysOfWeek = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+      .sort((a, b) => {
+        const daysOfWeek = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
 
-    return daysOfWeek.indexOf(a[0]) - daysOfWeek.indexOf(b[0]);
-  })
-  .reduce((obj, [key, value]) => {
-    obj[key] = value;
+        return daysOfWeek.indexOf(a[0]) - daysOfWeek.indexOf(b[0]);
+      })
+      .reduce((obj, [key, value]) => {
+        obj[key] = value;
 
-    return obj;
-  }, {});
+        return obj;
+      }, {});
 
     try {
       const { data } = await axiosWithToken.post('', {
