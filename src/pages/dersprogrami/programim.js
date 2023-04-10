@@ -21,28 +21,28 @@ function Programim() {
 
     const datem = async () => {
       const today = new Date();
-    
+
       // Bu haftanın başlangıç tarihini hesaplayın
       const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1));
-    
+
       // Bu haftanın son tarihini hesaplayın
       const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 7);
-    
+
       // Tablodaki tarihlerin saklanacağı bir dizi oluşturun
       const dates = {};
-    
+
       // Her bir günün karşısına o günün tarihini yazdırın
       for (let i = 0; i < daysOfWeek.length; i++) {
         const date = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + i);
         const formattedDate = date.toLocaleDateString('tr-TR').split('.').reverse().join('-');
         dates[daysOfWeek[i]] = formattedDate;
       }
-    
+
       setDates(dates)
       getEntries()
     }
-    
-  
+
+
     datem();
 
     //   Yukarıdaki kod parçasında, toISOString() yöntemi kullanarak JavaScript tarih nesnesini ISO 8601 biçimine dönüştürdük. Daha sonra, split('T')[0] kullanarak, tarihin "T" karakterinden önceki kısmını ayırarak yıl, ay ve gün bilgilerini içeren bir dize elde ettik. Son olarak, bu dizeyi dates nesnesine atadık. Bu şekilde, tarihler "Yıl-Ay-Gün" biçiminde saklanabilir ve PHPMyAdmin ile uyumlu hale getirilmiş olur.
@@ -72,40 +72,40 @@ function Programim() {
 
   const getEntries = async () => {
 
-if(dates){
+    if (dates) {
       const { data } = await axiosWithToken.post('', {
-      "query": "select",
-      "service": "scheduleEntry",
-      "dates": dates
-    });
+        "query": "select",
+        "service": "scheduleEntry",
+        "dates": dates
+      });
 
-    console.log(data?.data)
-    if (data.data?.entry === 3) { //girilmş sonuçlar varsa daha önceden hafta oluşturulmuş demektir direkt alıyoruz
-      setEntries(data?.data.scheduleEntry)
+      console.log(data?.data)
+      if (data.data?.entry === 3) { //girilmş sonuçlar varsa daha önceden hafta oluşturulmuş demektir direkt alıyoruz
+        setEntries(data?.data.scheduleEntry)
 
-    } else if (data.data?.entry === 2) { // 2 geldiyse hiç sonuç yoktur ders programından default bir haftalık programı yazıyoruz
-      let output = [];
+      } else if (data.data?.entry === 2) { // 2 geldiyse hiç sonuç yoktur ders programından default bir haftalık programı yazıyoruz
+        let output = [];
 
-      for (let gun in schedule) {
-        for (let ders of schedule[gun]) {
-          let item = {
-            "tarih": dates[gun],
-            "gün": gun,
-            "konu": ders["konu"],
-            "ders": ders["ders"],
-            "hedef_süre": ders["süre"],
-            "hedef_adet": ders["soru"],
-            "sonuc": ders["sonuc"]
-          };
-          output.push(item);
+        for (let gun in schedule) {
+          for (let ders of schedule[gun]) {
+            let item = {
+              "tarih": dates[gun],
+              "gün": gun,
+              "konu": ders["konu"],
+              "ders": ders["ders"],
+              "hedef_süre": ders["süre"],
+              "hedef_adet": ders["soru"],
+              "sonuc": ders["sonuc"]
+            };
+            output.push(item);
+          }
         }
-      }
-      setEntries(output)
-      
-    } else {
+        setEntries(output)
 
+      } else {
+
+      }
     }
-}
 
   }
 
@@ -118,58 +118,69 @@ if(dates){
 
 
 
-  const handleInputChange = (e, day, index, date,lesson,süre,adet) => {
-    const value = e.target.value;
-console.log(date)
+  const handleInputChange = (e, day, date, lesson, süre, adet) => {
+    const values = e.target.value;
+    const updatedEntries = entries;
 
-  const  entr = entries.map(item => {
+
+const son = updatedEntries.map(item => {
       if (item.gün === day && item.ders === lesson && item.tarih === date) {
-        return { ...item, sonuc: value };
-      } else { // hiç uyan yoksa ? yeniden oluştur
-        item = {
-          "tarih": date,
-          "gün": day,
-          "konu": "",
-          "ders": lesson,
-          "süre": süre,
-          "soru": adet,
-          "sonuc": value
-        };
+
+        return { ...item, sonuc: values };
       }
 
       return item;
     });
 
-setEntries(entr)
+    const matchingEntry = updatedEntries.find(item => item.gün === day && item.ders === lesson && item.tarih === date);
+    if (!matchingEntry) {
+      updatedEntries.push({
+        tarih: date,
+        gün: day,
+        sonuc: values,
+        ders: lesson,
+        hedef_süre: süre,
+        hedef_adet: adet
+      });
+    } else {
+      updatedEntries = son;
+    }
 
-  
-   
+    setEntries(updatedEntries);
   };
- console.log(entries)
+
+  console.log(entries)
 
   //bu fonksiyon konu kısmını alıp veriyi güncelliyor
-  const handleInputChange2 = (e, day, index, date,lesson,süre,adet) => {
-    const value = e.target.value;
-    
-    const  entr = entries.map(item => {
+  const handleInputChange2 = (e, day, date, lesson, süre, adet) => {
+    const values = e.target.value;
+    const updatedEntries = entries;
+
+
+const son = updatedEntries.map(item => {
       if (item.gün === day && item.ders === lesson && item.tarih === date) {
-        return { ...item, konu: value };  //koşula uyan itemi açıyoru ve konu kısmını değiştiriyoruz
-      } else { // hiç uyan yoksa ? yeniden oluştur
-        item = {
-          "tarih": date,
-          "gün": day,
-          "konu": value,
-          "ders": lesson,
-          "süre": süre,
-          "soru": adet,
-          "sonuc": ""
-        };
+
+        return { ...item, konu: values, hedef_süre:süre, hedef_adet:adet };
       }
 
-      return item;  //gezilen itemleri tekrar return ediyoruz ki dizi içine biriktirsin
+      return item;
     });
 
-setEntries(entr)
+    const matchingEntry = updatedEntries.find(item => item.gün === day && item.ders === lesson && item.tarih === date);
+    if (!matchingEntry) {
+      updatedEntries.push({
+        tarih: date,
+        gün: day,
+        konu: values,
+        ders: lesson,
+        hedef_süre: süre,
+        hedef_adet: adet
+      });
+    } else {
+      updatedEntries = son;
+    }
+
+    setEntries(updatedEntries);
 
   };
 
@@ -186,14 +197,13 @@ setEntries(entr)
         "dates": dates
       });
       toast.success("Soru adetleri eklendi.")
-      console.log(result)
 
     } catch (error) {
       console.error(error);
     }
 
   };
-
+  console.log(entries)
 
   return (
     <>
@@ -245,10 +255,10 @@ setEntries(entr)
                                 Konu:
                               </Typography>
                             )}
-                              <Input
+                            <Input
                               disableUnderline={true}
                               sx={{ width: "105px" }}
-                              defaultValue={
+                              value={
                                 entries &&
                                 entries?.filter(
                                   (item) =>
@@ -257,7 +267,7 @@ setEntries(entr)
                               }
                               placeholder="Konu"
                               onChange={(e) =>
-                                handleInputChange2(e, day, index, dates[day],lesson.ders,lesson.süre,lesson.soru)
+                                handleInputChange2(e, day, dates[day], lesson.ders, lesson.süre, lesson.soru)
                               }
                             />
                           </Grid>
@@ -286,7 +296,7 @@ setEntries(entr)
                             <Input
                               disableUnderline={true}
                               sx={{ width: "105px" }}
-                              defaultValue={
+                              value={
                                 entries &&
                                 entries?.filter(
                                   (item) =>
@@ -295,7 +305,7 @@ setEntries(entr)
                               }
                               placeholder="Çözülen adet"
                               onChange={(e) =>
-                                handleInputChange(e, day, index, dates[day],lesson.ders,lesson.süre,lesson.soru)
+                                handleInputChange(e, day, dates[day], lesson.ders, lesson.süre, lesson.soru)
                               }
                             />
                           </Grid>
