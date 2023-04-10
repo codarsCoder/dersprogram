@@ -95,55 +95,56 @@ const Kullanicilar = () => {
   }, [])
 
 
-  return (
-    <Grid container display="flex" flexDirection="column" gap="50px" p={5} component={Paper} sx={{minHeight:"500px"}}>
-      <Grid item  spacing={5}>
-        <form  onSubmit={handleSubmit}>
-          <Select style={{marginRight:"10px", marginBottom:"10px"}}  value={selectedUser} onChange={handleUserChange}>
-          <MenuItem value="Kullanıcı Seçiniz">
-          Kullanıcı Seçiniz
-              </MenuItem>
-            {users?.users.map((user) => (
-              <MenuItem key={user.user_id} value={user.user_id}>
-                {user.adi}
-              </MenuItem>
-            ))}
-          </Select>
+  return  user.statu === 2 && (
+           <Grid container display="flex" flexDirection="column" gap="50px" p={5} component={Paper} sx={{ minHeight: "500px" }}>
+          <Grid item spacing={5}>
+            <form onSubmit={handleSubmit}>
+              <Select style={{ marginRight: "10px", marginBottom: "10px" }} value={selectedUser} onChange={handleUserChange}>
+                <MenuItem value="Kullanıcı Seçiniz">
+                  Kullanıcı Seçiniz
+                </MenuItem>
+                {users?.users.map((user) => (
+                  <MenuItem key={user.user_id} value={user.user_id}>
+                    {user.adi}
+                  </MenuItem>
+                ))}
+              </Select>
 
-          <Select  style={{marginRight:"10px", marginBottom:"10px"}}   value={selectedHafta} onChange={handleHaftaChange}>
-          <MenuItem value="Hafta Seçiniz">
-          Hafta Seçiniz
-              </MenuItem>
-            {users?.haftalar.map((hafta) => (
-              <MenuItem key={hafta.id} value={hafta.hafta}>
-                {hafta.hafta}
-              </MenuItem>
-            ))}
-          </Select>
+              <Select style={{ marginRight: "10px", marginBottom: "10px" }} value={selectedHafta} onChange={handleHaftaChange}>
+                <MenuItem value="Hafta Seçiniz">
+                  Hafta Seçiniz
+                </MenuItem>
+                {users?.haftalar.map((hafta) => (
+                  <MenuItem key={hafta.id} value={hafta.hafta}>
+                    {hafta.hafta}
+                  </MenuItem>
+                ))}
+              </Select>
 
-          <Button size='large' variant="contained" type="submit">Göster</Button>
-
-
-        </form>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        {chartData ?
-          (
-           
-              <ApexChart chartData={chartData} />
-           
-          )
-          :
-          (
-            <Typography>Veri girilmediği için Grafik şuanda gösterilemiyor</Typography>
-          )
-        }
-      </Grid>
+              <Button size='large' variant="contained" type="submit">Göster</Button>
 
 
-    </Grid>
+            </form>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            {chartData ?
+              (
 
-  )
+                <ApexChart chartData={chartData} />
+
+              )
+              :
+              (
+                <Typography>Veri girilmediği için Grafik şuanda gösterilemiyor</Typography>
+              )
+            }
+          </Grid>
+
+
+        </Grid>
+
+      )
+  
 }
 
 export default Kullanicilar
