@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import useAxios from './api/axiosWithToken';
+import useAxios from '../api/axiosWithToken';
 import { Select, MenuItem, Button, List, ListItem, ListItemText, Paper } from "@mui/material";
 import Grid from '@mui/material/Grid'
 import ApexChart from 'src/grafikler/HaftalikTablo';
@@ -11,8 +11,8 @@ import { Typography } from '@mui/material'
 const Kullanicilar = () => {
 
   const [users, setUsers] = useState()
-  const [selectedUser, setSelectedUser] = useState("");
-  const [selectedHafta, setSelectedHafta] = useState("");
+  const [selectedUser, setSelectedUser] = useState("Kullanıcı Seçiniz");
+  const [selectedHafta, setSelectedHafta] = useState("Hafta Seçiniz");
   const [results, setResults] = useState();
   const [chartData, setChartData] = useState();
 
@@ -49,7 +49,6 @@ const Kullanicilar = () => {
   }
 
 
-
   const { axiosWithToken } = useAxios();
 
   const topla = (datam) => {
@@ -69,8 +68,7 @@ const Kullanicilar = () => {
         totalSonuc[date] = parseInt(item.sonuc);
       }
     }
-    console.log(totalHedefAdet)
-    console.log(totalSonuc)
+
     setResults({ "hedef": totalHedefAdet, "sonuc": totalSonuc, "tarih": "" })
   }
 
@@ -98,11 +96,13 @@ const Kullanicilar = () => {
 
 
   return (
-    <Grid container display="flex" flexDirection="column" gap="50px" component={Paper} sx={{minHeight:"500px"}}>
-      <Grid item>
-        <form onSubmit={handleSubmit}>
-          <Select value={selectedUser} onChange={handleUserChange}>
-            <MenuItem value="">Select User</MenuItem>
+    <Grid container display="flex" flexDirection="column" gap="50px" p={5} component={Paper} sx={{minHeight:"500px"}}>
+      <Grid item  spacing={5}>
+        <form  onSubmit={handleSubmit}>
+          <Select style={{marginRight:"10px", marginBottom:"10px"}}  value={selectedUser} onChange={handleUserChange}>
+          <MenuItem value="Kullanıcı Seçiniz">
+          Kullanıcı Seçiniz
+              </MenuItem>
             {users?.users.map((user) => (
               <MenuItem key={user.user_id} value={user.user_id}>
                 {user.adi}
@@ -110,8 +110,10 @@ const Kullanicilar = () => {
             ))}
           </Select>
 
-          <Select value={selectedHafta} onChange={handleHaftaChange}>
-            <MenuItem value="">Select Week</MenuItem>
+          <Select  style={{marginRight:"10px", marginBottom:"10px"}}   value={selectedHafta} onChange={handleHaftaChange}>
+          <MenuItem value="Hafta Seçiniz">
+          Hafta Seçiniz
+              </MenuItem>
             {users?.haftalar.map((hafta) => (
               <MenuItem key={hafta.id} value={hafta.hafta}>
                 {hafta.hafta}
@@ -119,7 +121,7 @@ const Kullanicilar = () => {
             ))}
           </Select>
 
-          <Button type="submit">Submit</Button>
+          <Button size='large' variant="contained" type="submit">Göster</Button>
 
 
         </form>

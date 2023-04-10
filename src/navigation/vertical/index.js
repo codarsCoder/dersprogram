@@ -1,8 +1,6 @@
 // ** Icon imports
-import HomeOutline from 'mdi-material-ui/HomeOutline'
-import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
 
-import { AccountCog, BookAccount, BookClock, HomeAccount, PlusBox, ViewCarousel } from 'mdi-material-ui'
+import { AccountCog, AccountMultiple, BookAccount, BookClock, HomeAccount, NaturePeople, PlusBox, ViewCarousel } from 'mdi-material-ui'
 import { useSelector } from 'react-redux'
 
 
@@ -36,8 +34,8 @@ import { useSelector } from 'react-redux'
     if (user.statu == 2) {
       items.splice(1, 0, {
         title: "Kullanıcılar",
-        icon: PlusBox,
-        path: "/kullanicilar",
+        icon: AccountMultiple,
+        path: "kullanici/kullanicilar",
       },{
         title: "Kullanıcı Ekle",
         icon: PlusBox,
