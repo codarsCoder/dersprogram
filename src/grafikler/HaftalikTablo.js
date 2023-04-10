@@ -12,11 +12,11 @@ const ApexChart = ({ chartData }) => {
             data: [
                 {
                     x: 'Pazartesi',
-                    y: chartData?.sonuc["Pazartesi"],
+                    y: chartData?.sonuc["Pazartesi"] ? chartData?.sonuc["Pazartesi"] : 0,
                     goals: [
                         {
                             name: 'Hedef',
-                            value: chartData?.hedef["Pazartesi"],
+                            value: chartData?.hedef["Pazartesi"] ? chartData?.hedef["Pazartesi"] : 0,
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -24,11 +24,11 @@ const ApexChart = ({ chartData }) => {
                 },
                 {
                     x: 'Salı',
-                    y: chartData?.sonuc["Salı"],
+                    y: chartData?.sonuc["Salı"] ? chartData?.sonuc["Salı"] : 0,
                     goals: [
                         {
                             name: 'Hedef',
-                            value: chartData?.hedef["Salı"],
+                            value: chartData?.hedef["Salı"] ? chartData?.hedef["Salı"] : 0,
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -36,11 +36,11 @@ const ApexChart = ({ chartData }) => {
                 },
                 {
                     x: 'Çarşamba',
-                    y: chartData?.sonuc["Çarşamba"],
+                    y: chartData?.sonuc["Çarşamba"] ? chartData?.sonuc["Çarşamba"] : 0,
                     goals: [
                         {
                             name: 'Hedef',
-                            value: chartData?.hedef["Çarşamba"],
+                            value: chartData?.hedef["Çarşamba"] ? chartData?.hedef["Çarşamba"] : 0,
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -48,11 +48,11 @@ const ApexChart = ({ chartData }) => {
                 },
                 {
                     x: 'Perşembe',
-                    y: chartData?.sonuc["Perşembe"],
+                    y: chartData?.sonuc["Perşembe"] ? chartData?.sonuc["Perşembe"] : 0,
                     goals: [
                         {
                             name: 'Hedef',
-                            value: chartData?.hedef["Perşembe"],
+                            value: chartData?.hedef["Perşembe"] ? chartData?.hedef["Perşembe"] : 0,
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -60,11 +60,11 @@ const ApexChart = ({ chartData }) => {
                 },
                 {
                     x: 'Cuma',
-                    y: chartData?.sonuc["Cuma"],
+                    y: chartData?.sonuc["Cuma"] ? chartData?.sonuc["Cuma"] : 0,
                     goals: [
                         {
                             name: 'Hedef',
-                            value: chartData?.hedef["Cuma"],
+                            value: chartData?.hedef["Cuma"] ? chartData?.hedef["Cuma"] : 0,
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -72,11 +72,11 @@ const ApexChart = ({ chartData }) => {
                 },
                 {
                     x: 'Cumartesi',
-                    y: chartData?.sonuc["Cumartesi"],
+                    y: chartData?.sonuc["Cumartesi"] ? chartData?.sonuc["Cumartesi"] : 0,
                     goals: [
                         {
                             name: 'Hedef',
-                            value: chartData?.hedef["Cumartesi"],
+                            value: chartData?.hedef["Cumartesi"] ? chartData?.hedef["Cumartesi"] : 0,
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },
@@ -84,11 +84,11 @@ const ApexChart = ({ chartData }) => {
                 },
                 {
                     x: 'Pazar',
-                    y: chartData?.sonuc["Pazar"],
+                    y: chartData?.sonuc["Pazar"] ? chartData?.sonuc["Pazar"] : 0,
                     goals: [
                         {
                             name: 'Hedef',
-                            value: chartData?.hedef["Pazar"],
+                            value: chartData?.hedef["Pazar"] ? chartData?.hedef["Pazar"] : 0,
                             strokeHeight: 5,
                             strokeColor: '#775DD0',
                         },

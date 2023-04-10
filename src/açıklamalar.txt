@@ -1,0 +1,1 @@
+1-projede adminin gördüğü kullanıcıların tarih aralıkları db den okunuyor, bir kullanıcı işlem yapıyorsa , içinde bulunduğu hafta db de yoksa ekleniyor 
