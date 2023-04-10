@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Card, CardContent, CardHeader, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Button, Card, CardContent, CardHeader, CircularProgress, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { DeleteCircleOutline, Plus as AddIcon } from 'mdi-material-ui';
 import useAxios from '../api/axiosWithToken';
 import { useRouter } from 'next/router';
@@ -26,7 +26,7 @@ export default function DersProgrami() {
 
   const [dayInputs, setDayInputs] = useState({});
   const [categories, setCategories] = useState()
-
+  const [isLoading, setIsLoading] = useState(false);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -78,9 +78,6 @@ export default function DersProgrami() {
 
 
 
-
-
-
   const addInput = (day) => {
     setDayInputs({
       ...dayInputs,
@@ -99,6 +96,7 @@ export default function DersProgrami() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
 
     //ders programı ekleme sırasına göre günler karışıyor o yüzden yeniden sıraladık
     const siraliDersProgrami = Object.entries(dayInputs)
@@ -121,11 +119,14 @@ export default function DersProgrami() {
       });
       if (data.status) {
         toast.success("Ders programı kaydedildi.")
+        setIsLoading(false)
       }
 
     } catch (error) {
       console.error(error);
+      setIsLoading(false)
     }
+
   };
 
   const removeInput = (day, index) => {
@@ -214,6 +215,8 @@ export default function DersProgrami() {
                           </IconButton>
                         </FormControl>
 
+                       
+
                       ))}</td>
                     <td>
                       <AddIcon
@@ -222,14 +225,16 @@ export default function DersProgrami() {
                         className='add-button'
                       />
                     </td>
+                  
                     <Divider></Divider>
                   </tr>
                 ))}
               </table>
             </Grid>
-            <Button type="submit" variant="contained" size="small" >
-              Kaydet
-            </Button>
+            <Button type="submit" variant="contained" size="small" disabled={isLoading}>
+        {isLoading && <CircularProgress color="info" size={20} />}
+        {!isLoading && 'Kaydet'}
+      </Button>
           </form>
         </CardContent>
       </Card>

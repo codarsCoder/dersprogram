@@ -22,7 +22,7 @@ import useVericek from 'src/hooks/useVericek'
 import { useState } from 'react'
 import ApexChart from 'src/grafikler/HaftalikTablo'
 import useAxios from './api/axiosWithToken'
-import { Paper, Typography } from '@mui/material'
+import { Box, CircularProgress, Paper, Typography } from '@mui/material'
 
 
 
@@ -175,25 +175,39 @@ const Dashboard = () => {
 
 
   return (
-    <ApexChartWrapper>
-      <Grid container spacing={6} p={3}>
-        {/* <Grid item xs={12} md={4}>
-          <Trophy />
+    entries ?
+    (
+      <ApexChartWrapper>
+        <Grid container spacing={6} p={3}>
+          {chartData ?
+            (
+              <Grid item xs={12} md={6} >
+                <ApexChart chartData={chartData} />
+              </Grid>
+            )
+            :
+            (
+              <Typography sx={{ width: "100%", textAlign: "center" }}>Veri girilmediği için Grafik şuanda gösterilemiyor</Typography>
+            )
+          }
         </Grid>
-        <Grid item xs={12} md={8}>
-          <StatisticsCard />
-        </Grid> */}
-        {chartData ?
-          (
-            <Grid item xs={12} md={6} >
-              <ApexChart chartData={chartData} />
-            </Grid>
-          )
-          :
-          (
-            <Typography sx={{ width: "100%", textAlign: "center" }}>Veri girilmediği için Grafik şuanda gösterilemiyor</Typography>
-          )
-        }
+      </ApexChartWrapper>
+    )
+    :
+    (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    )
+  );
+  
+}
+
+export default Dashboard
+
+
+
+
 
         {/* <Grid item xs={12} md={6} lg={4}>
           <WeeklyOverview />
@@ -265,9 +279,3 @@ const Dashboard = () => {
         <Grid item xs={12}>
           <TumIsletmelerTablo />
         </Grid> */}
-      </Grid>
-    </ApexChartWrapper>
-  )
-}
-
-export default Dashboard

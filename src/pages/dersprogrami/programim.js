@@ -10,7 +10,7 @@ function Programim() {
   const [questions, setQuestions] = useState()
   const [dates, setDates] = useState() // gün-tarih listesi o haftanın tarihleri içinde 
   const [entries, setEntries] = useState() //mevcut girilmiş soruları çeker
-
+  const [isLoading, setIsLoading] = useState(false);
   const daysOfWeek = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
 
   const { axiosWithToken } = useAxios();
@@ -188,7 +188,7 @@ const son = updatedEntries.map(item => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true)
     try {
       const { data } = await axiosWithToken.post('', {
         "query": 'insert',
@@ -197,9 +197,10 @@ const son = updatedEntries.map(item => {
         "dates": dates
       });
       toast.success("Soru adetleri eklendi.")
-
+      setIsLoading(false)
     } catch (error) {
       console.error(error);
+      setIsLoading(false)
     }
 
   };
@@ -325,7 +326,8 @@ const son = updatedEntries.map(item => {
             onClick={handleSubmit}
             size="small"
           >
-            Kaydet
+          {isLoading && <CircularProgress color="info" size={20} />}
+        {!isLoading && 'Kaydet'}
           </Button>
         </Grid>
 
