@@ -118,13 +118,23 @@ if(dates){
 
 
 
-  const handleInputChange = (e, day, index, date,lesson) => {
+  const handleInputChange = (e, day, index, date,lesson,süre,adet) => {
     const value = e.target.value;
 console.log(date)
 
   const  entr = entries.map(item => {
       if (item.gün === day && item.ders === lesson && item.tarih === date) {
         return { ...item, sonuc: value };
+      } else { // hiç uyan yoksa ? yeniden oluştur
+        item = {
+          "tarih": date,
+          "gün": day,
+          "konu": "",
+          "ders": lesson,
+          "süre": süre,
+          "soru": adet,
+          "sonuc": value
+        };
       }
 
       return item;
@@ -138,12 +148,22 @@ setEntries(entr)
  console.log(entries)
 
   //bu fonksiyon konu kısmını alıp veriyi güncelliyor
-  const handleInputChange2 = (e, day, index, date,lesson) => {
+  const handleInputChange2 = (e, day, index, date,lesson,süre,adet) => {
     const value = e.target.value;
     
     const  entr = entries.map(item => {
       if (item.gün === day && item.ders === lesson && item.tarih === date) {
         return { ...item, konu: value };  //koşula uyan itemi açıyoru ve konu kısmını değiştiriyoruz
+      } else { // hiç uyan yoksa ? yeniden oluştur
+        item = {
+          "tarih": date,
+          "gün": day,
+          "konu": value,
+          "ders": lesson,
+          "süre": süre,
+          "soru": adet,
+          "sonuc": ""
+        };
       }
 
       return item;  //gezilen itemleri tekrar return ediyoruz ki dizi içine biriktirsin
@@ -179,7 +199,7 @@ setEntries(entr)
     <>
       {entries ? (
         <Grid container spacing={2}>
-          {Object.keys(schedule).map((day, i) => (
+          {Object.keys(schedule).map((day, i) => (  // burada her zaman ders programı baz alınıp daha önce girilmiş sonuçlar varsa o gerekli yerlere yazılıyor böylece ders programı güncellendiğinde güncel hali ekrana basılıyor
             <Grid item xs={12} key={i}>
               <Paper sx={{ p: 2 }}>
                 <Grid container spacing={2}>
@@ -237,7 +257,7 @@ setEntries(entr)
                               }
                               placeholder="Konu"
                               onChange={(e) =>
-                                handleInputChange2(e, day, index, dates[day],lesson.ders)
+                                handleInputChange2(e, day, index, dates[day],lesson.ders,lesson.süre,lesson.soru)
                               }
                             />
                           </Grid>
@@ -275,7 +295,7 @@ setEntries(entr)
                               }
                               placeholder="Çözülen adet"
                               onChange={(e) =>
-                                handleInputChange(e, day, index, dates[day],lesson.ders)
+                                handleInputChange(e, day, index, dates[day],lesson.ders,lesson.süre,lesson.soru)
                               }
                             />
                           </Grid>
