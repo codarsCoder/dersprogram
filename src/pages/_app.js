@@ -67,12 +67,12 @@ const App = props => {
       <PersistGate loading={null} persistor={persistor}>
         <Provider store={store}>
           <Head>
-            <title>{`${themeConfig.templateName} - whereishalal Admin Template`}</title>
+            <title>{`${themeConfig.templateName} - ders proramı Admin Template`}</title>
             <meta
               name='description'
-              content={`${themeConfig.templateName} – whereishalal Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
+              content={`${themeConfig.templateName} – ders proramı Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
             />
-            <meta name='keywords' content='whereishalal' />
+            <meta name='keywords' content='ders proramı' />
             <meta name='viewport' content='initial-scale=1, width=device-width' />
           </Head>
           <ToastContainer />

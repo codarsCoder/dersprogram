@@ -40,6 +40,7 @@ import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { useSelector } from 'react-redux'
 
 
 // ** Styled Components
@@ -67,7 +68,16 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 const RegisterPage = () => {
 
   const parolaRef = useRef(null)
-  const router = useRouter()
+ 
+  
+  const user = useSelector((state) => state.user);
+
+  const router = useRouter();
+
+  if (user.statu !== 2) {
+    router.push("/")
+  }
+
 
   // ** States
   const [values, setValues] = useState({
@@ -94,12 +104,10 @@ const RegisterPage = () => {
   const handleSubmit = async (event) => {
 
     event.preventDefault()
-    
     if (!values.ad || !values.email || !values.parola || !values.parola2) {
-      return toast.error("Formdaki alanlar boş bırakılamaz!")
-    }
-
-    if(values.parola === values.parola2){
+        return toast.error("Formdaki alanlar boş bırakılamaz!")
+      }
+    if(values.parola === values.parola2 && values.parola !== ""){
           // LOGİN İSTEGİ ATIYORUZ    const { data } = await axiosWithToken.get(`account/${user?.id}/`)
     const { data } = await axios.post("https://codarscoder.tk/dersprogrami/", {
       "query": "insert",
@@ -117,7 +125,7 @@ const RegisterPage = () => {
 
 
       // YÖNLENDİRİYORUZ
-      router.push("/login")
+    //   router.push("/login")
 
     } else {
       toast.error("Kayıt Başarılı Olmadı!")
@@ -150,7 +158,7 @@ const RegisterPage = () => {
             </Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='ad' label='Adınız - Soyadınız' sx={{ marginBottom: 4 }} onChange={handleChange('adi')} />
+            <TextField required autoFocus fullWidth id='ad' label='Adınız - Soyadınız' sx={{ marginBottom: 4 }} onChange={handleChange('adi')} />
             <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} onChange={handleChange('email')} />
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-register-password'>Parola</InputLabel>
@@ -200,29 +208,12 @@ const RegisterPage = () => {
             <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7, mt: 4 }} onClick={handleSubmit}>
               Kayıt Ol
             </Button>
-            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Typography variant='body2'>
-                <Link passHref href='/login'>
-                  <LinkStyled>Zaten üye misiniz?</LinkStyled>
-                </Link>
-              </Typography>
-            </Box>
-            <Divider sx={{ my: 5 }}>or</Divider>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Google sx={{ color: '#db4437' }} />
-                </IconButton>
-              </Link>
-              Google ile giriş yap
-            </Box>
           </form>
         </CardContent>
       </Card>
-      <FooterIllustrationsV1 />
     </Box>
   )
 }
-RegisterPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
+// RegisterPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
 
 export default RegisterPage

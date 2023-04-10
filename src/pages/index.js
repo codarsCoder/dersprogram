@@ -14,21 +14,11 @@ import CardStatisticsVerticalComponent from 'src/@core/components/card-statistic
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Demo Components Imports
-import Table from 'src/views/dashboard/Table'
-import Trophy from 'src/views/dashboard/Trophy'
-import TotalEarning from 'src/views/dashboard/TotalEarning'
-import StatisticsCard from 'src/views/dashboard/StatisticsCard'
-import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
-import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
-import SalesByCountries from 'src/views/dashboard/SalesByCountries'
+
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import useVericek from 'src/hooks/useVericek'
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import RolesTable from 'src/tables/roles'
-import Preloader from 'src/components/Preloader'
 import { useState } from 'react'
 import ApexChart from 'src/grafikler/HaftalikTablo'
 import useAxios from './api/axiosWithToken'
@@ -67,38 +57,38 @@ const Dashboard = () => {
 
   const defaultEntries = {
     "hedef": {
-        "Pazartesi": 0,
-        "Salı": 0,
-        "Çarşamba": 0,
-        "Pazar": 0,
-        "Perşembe": 0,
-        "Cuma": 0,
-        "Cumartesi": 0
+      "Pazartesi": 0,
+      "Salı": 0,
+      "Çarşamba": 0,
+      "Pazar": 0,
+      "Perşembe": 0,
+      "Cuma": 0,
+      "Cumartesi": 0
     },
     "sonuc": {
-        "Pazartesi": 0,
-        "Salı": 0,
-        "Çarşamba": 0,
-        "Pazar": 0,
-        "Perşembe": 0,
-        "Cuma": 0,
-        "Cumartesi": 0
+      "Pazartesi": 0,
+      "Salı": 0,
+      "Çarşamba": 0,
+      "Pazar": 0,
+      "Perşembe": 0,
+      "Cuma": 0,
+      "Cumartesi": 0
     },
     "tarih": {
-        "Pazartesi": "0000-00-00",
-        "Salı": "0000-00-00",
-        "Çarşamba": "0000-00-00",
-        "Perşembe": "0000-00-00",
-        "Cuma": "0000-00-00",
-        "Cumartesi": "0000-00-00",
-        "Pazar": "0000-00-00"
+      "Pazartesi": "0000-00-00",
+      "Salı": "0000-00-00",
+      "Çarşamba": "0000-00-00",
+      "Perşembe": "0000-00-00",
+      "Cuma": "0000-00-00",
+      "Cumartesi": "0000-00-00",
+      "Pazar": "0000-00-00"
     }
   }
 
   const [dates, setDates] = useState() // gün-tarih listesi o haftanın tarihleri içinde 
   const [entries, setEntries] = useState() //mevcut girilmiş soruları çeker
   const [chartData, setChartData] = useState(defaultEntries);
-  
+
 
   const { axiosWithToken } = useAxios();
 
@@ -115,16 +105,16 @@ const Dashboard = () => {
     const daysOfWeek = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
 
     const today = new Date();
-    
+
     // Bu haftanın başlangıç tarihini hesaplayın
     const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1));
-  
+
     // Bu haftanın son tarihini hesaplayın
     const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 7);
-  
+
     // Tablodaki tarihlerin saklanacağı bir dizi oluşturun
     const dates = {};
-  
+
     // Her bir günün karşısına o günün tarihini yazdırın
     for (let i = 0; i < daysOfWeek.length; i++) {
       const date = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + i);
@@ -142,27 +132,27 @@ const Dashboard = () => {
         "service": "scheduleEntry",
         "dates": dates
       });
-      
-//toplam hedefler hesaplanıyor
-const datam =data?.data.scheduleEntry
-let totalHedefAdet = {};
-let totalSonuc = {};
 
-for (let i = 0; i < datam.length; i++) {
-    let item = datam[i];
-    let date = item.gün;
-    if (date in totalHedefAdet) {
-        totalHedefAdet[date] += parseInt(item.hedef_adet);
-        totalSonuc[date] += parseInt(item.sonuc);
-    } else {
-        totalHedefAdet[date] = parseInt(item.hedef_adet);
-        totalSonuc[date] = parseInt(item.sonuc);
-    }
-}
+      //toplam hedefler hesaplanıyor
+      const datam = data?.data.scheduleEntry
+      let totalHedefAdet = {};
+      let totalSonuc = {};
+
+      for (let i = 0; i < datam.length; i++) {
+        let item = datam[i];
+        let date = item.gün;
+        if (date in totalHedefAdet) {
+          totalHedefAdet[date] += parseInt(item.hedef_adet);
+          totalSonuc[date] += parseInt(item.sonuc);
+        } else {
+          totalHedefAdet[date] = parseInt(item.hedef_adet);
+          totalSonuc[date] = parseInt(item.sonuc);
+        }
+      }
 
 
 
-      setEntries({"hedef":totalHedefAdet,"sonuc":totalSonuc,"tarih":dates})
+      setEntries({ "hedef": totalHedefAdet, "sonuc": totalSonuc, "tarih": dates })
     } catch (error) {
 
     }
@@ -177,7 +167,7 @@ for (let i = 0; i < datam.length; i++) {
 
   useEffect(() => {
 
-   setChartData(entries)
+    setChartData(entries)
 
   }, [entries])
 
@@ -195,13 +185,13 @@ for (let i = 0; i < datam.length; i++) {
         </Grid> */}
         {chartData ?
           (
-            <Grid   item xs={12} md={6} >
-              <ApexChart  chartData={chartData} />
+            <Grid item xs={12} md={6} >
+              <ApexChart chartData={chartData} />
             </Grid>
           )
           :
           (
-            <Typography sx={{width:"100%",textAlign:"center"}}>Veri girilmediği için Grafik şuanda gösterilemiyor</Typography>
+            <Typography sx={{ width: "100%", textAlign: "center" }}>Veri girilmediği için Grafik şuanda gösterilemiyor</Typography>
           )
         }
 

@@ -38,7 +38,7 @@ const Kullanicilar = () => {
     // setResults(filteredResults);
     topla(filteredResults)
   };
-  console.log(results)
+
 
   const user = useSelector((state) => state.user);
 

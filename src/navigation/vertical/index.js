@@ -38,6 +38,10 @@ import { useSelector } from 'react-redux'
         title: "Kullanıcılar",
         icon: PlusBox,
         path: "/kullanicilar",
+      },{
+        title: "Kullanıcı Ekle",
+        icon: PlusBox,
+        path: "/kullanici",
       });
     }
   
