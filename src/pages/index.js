@@ -186,7 +186,7 @@ for (let i = 0; i < datam.length; i++) {
 
   return (
     <ApexChartWrapper>
-      <Grid container spacing={6}>
+      <Grid container spacing={6} p={3}>
         {/* <Grid item xs={12} md={4}>
           <Trophy />
         </Grid>
@@ -201,7 +201,7 @@ for (let i = 0; i < datam.length; i++) {
           )
           :
           (
-            <Typography>Veri girilmediği için Grafik şuanda gösterilemiyor</Typography>
+            <Typography sx={{width:"100%",textAlign:"center"}}>Veri girilmediği için Grafik şuanda gösterilemiyor</Typography>
           )
         }
 

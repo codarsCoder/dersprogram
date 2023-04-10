@@ -138,7 +138,7 @@ export default function DersProgrami() {
 
   return (
 
-    <Box className='content-center'>
+    <Box className='content-center' sx={{minWidth:"800px",overflowX:"auto"}}>
       <Card sx={{ zIndex: 1 }}>
         <CardHeader title="Ders Programı Ekle/Düzenle" />
         <Grid sx={{ paddingLeft: 5 }}>  <Button variant='contained' color='secondary' startIcon={<AddIcon />} onClick={handleOpen}>Ders Ekle</Button></Grid>
