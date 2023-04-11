@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import useAxios from 'src/pages/api/axiosWithToken';
 import { setLoader } from 'src/redux/userslice';
 
 const Auth = ({children}) => {
@@ -8,11 +10,29 @@ const Auth = ({children}) => {
       // router tanımla 
   const router = useRouter()
 
+  const { axiosWithToken } = useAxios();
 
   // redux tan user al 
  const user = useSelector((state => state.user))
  const dispatch = useDispatch()
 
+ useEffect(() => {
+
+  const checkToken = async () => {
+
+    const { data } = await axiosWithToken.post('', {
+      "query": "select",
+      "service": "checkToken"
+    });
+
+if(!data.status){
+  toast.error("Giriş süreniz doldu tekrar giriş yapınız!")
+  router.push("/login")
+}
+  }
+
+  checkToken();
+}, [])
 
  useEffect(() => {
 
