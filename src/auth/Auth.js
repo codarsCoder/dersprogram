@@ -32,7 +32,7 @@ const Auth = ({ children }) => {
         }
 
       } else { //axioswithtoken boş gelmişse demekki hiç token vs yok 
-        toast.error("Giriş süreniz doldu tekrar giriş yapınız!")
+        // toast.error("Giriş süreniz doldu tekrar giriş yapınız!")
         dispatch(userLogout())
         router.push("/login")
       }
