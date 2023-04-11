@@ -22,7 +22,7 @@ import useVericek from 'src/hooks/useVericek'
 import { useState } from 'react'
 import ApexChart from 'src/grafikler/HaftalikTablo'
 import useAxios from './api/axiosWithToken'
-import { Box, CircularProgress, Paper, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 
 
 
@@ -41,7 +41,7 @@ const Dashboard = () => {
   //  veriçekme hooku
   const { responseData, postData } = useVericek();
 
-
+const [weeks, setWeeks] = useState()
 
   // const result = []; toplam sorular için
 
@@ -53,7 +53,7 @@ const Dashboard = () => {
   //   result.push({ day: day, totalQuestions: totalQuestions });
   // }
 
-  // console.log(result);
+
 
   const defaultEntries = {
     "hedef": {
@@ -85,10 +85,12 @@ const Dashboard = () => {
     }
   }
 
-  const [dates, setDates] = useState() // gün-tarih listesi o haftanın tarihleri içinde 
+  
+  const [dates, setDates] = useState() // gün-tarih listesi o haftanın tarihlsetChartDataeri içinde 
   const [entries, setEntries] = useState() //mevcut girilmiş soruları çeker
-  const [chartData, setChartData] = useState(defaultEntries);
-
+  const [entriesList, setEntriesList] = useState() //mevcut girilmiş soruları çeker
+  const [chartData,setChartData ] = useState(defaultEntries);
+  const [selectedHafta, setSelectedHafta] = useState("Hafta Seçiniz");
 
   const { axiosWithToken } = useAxios();
 
@@ -124,15 +126,16 @@ const Dashboard = () => {
     }
   }, [])
 
-  const getEntries = async () => { //bu haftanın ders girişlerini alacak
+  const getEntries = async (datem = "") => { //bu haftanın ders girişlerini alacak
 
     try {
       const { data } = await axiosWithToken.post('', {
         "query": "select",
         "service": "scheduleEntry",
-        "dates": dates
+        "dates": datem ? datem : dates  // parametre yoksa o haftayı çeker
       });
 
+      setEntriesList(data.data.scheduleEntry)
       //toplam hedefler hesaplanıyor
       const datam = data?.data.scheduleEntry
       let totalHedefAdet = {};
@@ -166,41 +169,123 @@ const Dashboard = () => {
   }, [dates])
 
   useEffect(() => {
-
+    console.log("first")
+    setChartData()
     setChartData(entries)
 
   }, [entries])
 
+  useEffect(() => {
+
+    const getweeks = async () => {
+
+      const { data } = await axiosWithToken.post('', {
+        "query": "select",
+        "service": "weeks"
+      });
+
+   setWeeks(data.data)
+    }
+
+    getweeks();
+  }, [])
 
 
+
+const handleHaftaChange = (event) => {
+  setSelectedHafta(event.target.value);
+};
+
+
+const handleSubmit = (event) => {
+  event.preventDefault();
+
+// setDates({"Pazar":selectedHafta.split("/")[1], "Pazartesi":selectedHafta.split("/")[0]})
+
+getEntries({"Pazar":selectedHafta.split("/")[1], "Pazartesi":selectedHafta.split("/")[0]})
+}
 
   return (
     entries ?
-    (
-      <ApexChartWrapper>
-        <Grid container spacing={6} p={3}>
-          {chartData ?
-            (
-              <Grid item xs={12} md={6} >
-                <ApexChart chartData={chartData} />
-              </Grid>
-            )
-            :
-            (
-              <Typography sx={{ width: "100%", textAlign: "center" }}>Veri girilmediği için Grafik şuanda gösterilemiyor</Typography>
-            )
-          }
+      (
+        <>
+      
+        <ApexChartWrapper>
+          <Grid container spacing={6} p={3}>
+            {chartData ?
+              (
+                <Grid item xs={12} md={6} >
+                  <ApexChart chartData={chartData} />
+                </Grid>
+              )
+              :
+              (
+                <Typography sx={{ width: "100%", textAlign: "center" }}>Veri girilmediği için Grafik şuanda gösterilemiyor.</Typography>
+              )
+            }
+          </Grid>
+        </ApexChartWrapper> 
+        <Grid item spacing={5}>
+            <form onSubmit={handleSubmit}>
+
+              <Select style={{ marginRight: "10px", marginBottom: "10px" }} value={selectedHafta} onChange={handleHaftaChange}>
+                <MenuItem value="Hafta Seçiniz">
+                  Hafta Seçiniz
+                </MenuItem>
+                {weeks?.haftalar.map((hafta) => (
+                  <MenuItem key={hafta.id} value={hafta.hafta}>
+                    {hafta.hafta}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <Button size='large' variant="contained" type="submit">Göster</Button>
+
+
+            </form>
+          </Grid>
+        <Grid>
+        <TableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>#</TableCell>
+            <TableCell>Tarih</TableCell>
+            <TableCell>Gün</TableCell>
+            <TableCell>Konu</TableCell>
+            <TableCell>Ders</TableCell>
+            <TableCell>Hedef Süre</TableCell>
+            <TableCell>Hedef Adet</TableCell>
+            <TableCell>Sonuç</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {entriesList?.map((row,i) => (
+            <TableRow key={row.id}>
+              <TableCell>{i+1}</TableCell>
+              <TableCell>{row.tarih}</TableCell>
+              <TableCell>{row.gün}</TableCell>
+              <TableCell>{row.konu}</TableCell>
+              <TableCell>{row.ders}</TableCell>
+              <TableCell>{row.hedef_süre}</TableCell>
+              <TableCell>{row.hedef_adet}</TableCell>
+              <TableCell>{row.sonuc}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
         </Grid>
-      </ApexChartWrapper>
-    )
-    :
-    (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
-      </Box>
-    )
+         </>
+      )
+      :
+      (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <CircularProgress />
+        </Box>
+      )
   );
-  
+
 }
 
 export default Dashboard
@@ -209,7 +294,7 @@ export default Dashboard
 
 
 
-        {/* <Grid item xs={12} md={6} lg={4}>
+{/* <Grid item xs={12} md={6} lg={4}>
           <WeeklyOverview />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
