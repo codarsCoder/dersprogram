@@ -1,68 +1,62 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import useAxios from 'src/pages/api/axiosWithToken';
+import useAxios from '../pages/api/axiosWithToken';
 import { setLoader, userLogout } from 'src/redux/userslice';
+import { toast } from 'react-toastify';
 
-const Auth = ({children}) => {
+const Auth = ({ children }) => {
 
-      // router tanımla 
+  // router tanımla 
   const router = useRouter()
 
   const { axiosWithToken } = useAxios();
 
-  
   // redux tan user al 
- const user = useSelector((state => state.user))
- const dispatch = useDispatch()
+  const user = useSelector((state => state.user))
+  const dispatch = useDispatch()
 
- useEffect(() => {
+  useEffect(() => {
 
-  const checkToken = async () => {
+    const checkTokenn = async () => {
+      if (axiosWithToken) {
+        const { data } = await axiosWithToken.post('', {
+          "query": "select",
+          "service": "checkToken"
+        });
 
-    const { data } = await axiosWithToken.post('', {
-      "query": "select",
-      "service": "checkToken"
-    });
+        if (!data.status) {
+          toast.error("Giriş süreniz doldu tekrar giriş yapınız!")
+          dispatch(userLogout())
+          router.push("/login")
+        }
 
-if(!data.status){
-  toast.error("Giriş süreniz doldu tekrar giriş yapınız!")
-  try {
-    const {data}=  await axiosWithToken.post('', {
-        query: 'select',
-        service: 'userlogout',
-      }); 
+      } else { //axioswithtoken boş gelmişse demekki hiç token vs yok 
+        toast.error("Giriş süreniz doldu tekrar giriş yapınız!")
+        dispatch(userLogout())
+        router.push("/login")
+      }
+    }
 
-    dispatch(userLogout())
-    router.push("/login")
-    
+    checkTokenn();
 
-    } catch (error) {
-      dispatch(userLogout())
-      console.error(error);
-    } 
-}
-  }
+  }, [router.pathname])
 
-  checkToken();
-}, [])
-
- useEffect(() => {
+  useEffect(() => {
 
     if (!router.isReady) {
-        return
-      }
-      
-   // kullanıcının maili reduxdan gelmiyorsa anasayfaya at
-   if (!user.token &&  router.pathname !== '/register') {
-     router.push("/login")
-   } else {
-    dispatch(setLoader({status:false})) //preloaderdeki işlemi burada iptal ettik
-   }
- }, [user])
+      return
+    }
 
- return (
+    // kullanıcının maili reduxdan gelmiyorsa anasayfaya at
+    if (!user.token && router.pathname !== '/register') {
+      router.push("/login")
+    } else {
+      dispatch(setLoader({ status: false })) //preloaderdeki işlemi burada iptal ettik
+    }
+  }, [user])
+
+  return (
     <>{children}</>
   )
 

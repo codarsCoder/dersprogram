@@ -21,7 +21,7 @@ const useAxios =  () => {
   const token = useSelector((state => state.user.token))
 
 
-  let axiosWithToken;
+  let axiosWithToken = null;
 
   if (token) {
 
