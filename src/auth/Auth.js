@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import useAxios from 'src/pages/api/axiosWithToken';
-import { setLoader } from 'src/redux/userslice';
+import { setLoader, userLogout } from 'src/redux/userslice';
 
 const Auth = ({children}) => {
 
