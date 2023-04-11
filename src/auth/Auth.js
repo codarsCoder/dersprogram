@@ -12,6 +12,7 @@ const Auth = ({children}) => {
 
   const { axiosWithToken } = useAxios();
 
+  
   // redux tan user al 
  const user = useSelector((state => state.user))
  const dispatch = useDispatch()
@@ -27,7 +28,20 @@ const Auth = ({children}) => {
 
 if(!data.status){
   toast.error("Giriş süreniz doldu tekrar giriş yapınız!")
-  router.push("/login")
+  try {
+    const {data}=  await axiosWithToken.post('', {
+        query: 'select',
+        service: 'userlogout',
+      }); 
+
+    dispatch(userLogout())
+    router.push("/login")
+    
+
+    } catch (error) {
+      dispatch(userLogout())
+      console.error(error);
+    } 
 }
   }
 
