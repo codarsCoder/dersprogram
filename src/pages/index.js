@@ -22,7 +22,8 @@ import useVericek from 'src/hooks/useVericek'
 import { useState } from 'react'
 import ApexChart from 'src/grafikler/HaftalikTablo'
 import useAxios from './api/axiosWithToken'
-import { Box, Button, CircularProgress, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Divider, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+
 
 
 
@@ -136,6 +137,7 @@ const [weeks, setWeeks] = useState()
       });
 
       setEntriesList(data.data.scheduleEntry)
+      
       //toplam hedefler hesaplanıyor
       const datam = data?.data.scheduleEntry
       let totalHedefAdet = {};
@@ -208,10 +210,10 @@ getEntries({"Pazar":selectedHafta.split("/")[1], "Pazartesi":selectedHafta.split
   return (
     entries ?
       (
-        <>
+        <Box container p={3} component={Paper}>
       
         <ApexChartWrapper>
-          <Grid container spacing={6} p={3}>
+          <Grid container spacing={6} >
             {chartData ?
               (
                 <Grid item xs={12} md={6} >
@@ -225,7 +227,8 @@ getEntries({"Pazar":selectedHafta.split("/")[1], "Pazartesi":selectedHafta.split
             }
           </Grid>
         </ApexChartWrapper> 
-        <Grid item spacing={5}>
+        <Divider></Divider>
+        <Grid item spacing={5} mt={5}>
             <form onSubmit={handleSubmit}>
 
               <Select style={{ marginRight: "10px", marginBottom: "10px" }} value={selectedHafta} onChange={handleHaftaChange}>
@@ -276,7 +279,7 @@ getEntries({"Pazar":selectedHafta.split("/")[1], "Pazartesi":selectedHafta.split
       </Table>
     </TableContainer>
         </Grid>
-         </>
+         </Box>
       )
       :
       (
