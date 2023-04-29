@@ -104,7 +104,7 @@ const RegisterPage = () => {
     const handleSubmit = async (event) => {
 
         event.preventDefault()
-        if (!values.ad || !values.email || !values.parola || !values.parola2) {
+        if (!values.adi || !values.email || !values.parola || !values.parola2) {
             return toast.error("Formdaki alanlar boş bırakılamaz!")
         }
         if (values.parola === values.parola2 && values.parola !== "") {
