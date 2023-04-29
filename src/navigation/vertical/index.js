@@ -35,7 +35,7 @@ import { useSelector } from 'react-redux'
       items.splice(1, 0, {
         title: "Kullanıcılar",
         icon: AccountMultiple,
-        path: "kullanici/kullanicilar",
+        path: "/kullanici/kullanicilar",
       },{
         title: "Kullanıcı Ekle",
         icon: PlusBox,
