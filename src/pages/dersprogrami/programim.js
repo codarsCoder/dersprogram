@@ -206,148 +206,92 @@ const son = updatedEntries.map(item => {
   };
   console.log(entries)
 
-  return (
-    <>
-      {entries ? (
-        <Grid container spacing={2}>
-          {Object.keys(schedule).map((day, i) => (  // burada her zaman ders programı baz alınıp daha önce girilmiş sonuçlar varsa o gerekli yerlere yazılıyor böylece ders programı güncellendiğinde güncel hali ekrana basılıyor
-            <Grid item xs={12} key={i}>
-              <Paper sx={{ p: 2 }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={2}>
-                    {!i && (
-                      <Typography variant="h6" gutterBottom>
-                        Tarih:
-                      </Typography>
-                    )}
-                    <Typography variant="body1">
-                      {dates?.[day]?.split('-').reverse().join('.')}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={1} sm={2}>
-                    {!i && (
-                      <Typography variant="h6" gutterBottom>
-                        Gün:
-                      </Typography>
-                    )}
-                    <Typography variant="body1">{day}</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>            {/* 0.index dışınnda gözükme */}
-                    {/* {!i && (
-                      <Typography variant="h6" gutterBottom>
-                        Ders / Hedef Süre(dk) / Hedef Soru / Çözülen Soru
-                      </Typography>
-                    )} */}
-
-                    <Grid container>
-                      {schedule[day].map((lesson, index) => (
-                        <React.Fragment key={`${day}-${index}`}>
-                          <Grid sx={{ borderBottom: "1px solid", mt: 2 }} item xs={4} md={3}>
-                            {!index && !i && (
-                              <Typography variant="h6" gutterBottom>
-                                Ders:
-                              </Typography>
-                            )}
-                            <Typography variant="body1">{lesson.ders}</Typography>
-                          </Grid>
-                          <Grid sx={{ borderBottom: "1px solid", mt: 2 }} item xs={4} md={3}>
-                            {!index && !i && (
-                              <Typography variant="h6" gutterBottom>
-                                Konu:
-                              </Typography>
-                            )}
-                            <Input
-                              disableUnderline={true}
-                              sx={{ width: "105px" }}
-                              value={
-                                entries &&
-                                entries?.filter(
-                                  (item) =>
-                                    item.tarih === dates[day] && item.ders === lesson.ders
-                                )[0]?.konu
-                              }
-                              placeholder="Konu"
-                              onChange={(e) =>
-                                handleInputChange2(e, day, dates[day], lesson.ders, lesson.süre, lesson.soru)
-                              }
-                            />
-                          </Grid>
-                          <Grid sx={{ borderBottom: "1px solid", mt: 2 }} item xs={2} md={2}>
-                            {!index && !i && (
-                              <Typography variant="h6" gutterBottom>
-                                Süre:
-                              </Typography>
-                            )}
-                            <Typography variant="body1">{lesson.süre}</Typography>
-                          </Grid>
-                          <Grid sx={{ borderBottom: "1px solid", mt: 2 }} item xs={2} md={2}>
-                            {!index && !i && (
-                              <Typography variant="h6" gutterBottom>
-                                Soru:
-                              </Typography>
-                            )}
-                            <Typography variant="body1">{lesson.soru}</Typography>
-                          </Grid>
-                          <Grid sx={{ borderBottom: "1px solid", mt: 1 }} item xs={3} md={2}>
-                            {!index && !i && (
-                              <Typography variant="h6" gutterBottom>
-                                Çözülen:
-                              </Typography>
-                            )}
-                            <Input
-                              disableUnderline={true}
-                              sx={{ width: "105px" }}
-                              value={
-                                entries &&
-                                entries?.filter(
-                                  (item) =>
-                                    item.tarih === dates[day] && item.ders === lesson.ders
-                                )[0]?.sonuc
-                              }
-                              placeholder="Çözülen adet"
-                              onChange={(e) =>
-                                handleInputChange(e, day, dates[day], lesson.ders, lesson.süre, lesson.soru)
-                              }
-                            />
-                          </Grid>
-                        </React.Fragment>
-                      ))}
-                    </Grid>
-                  </Grid>
-                </Grid>
-
-              </Paper>
-            </Grid>
-          ))}
-
+return (
+  <>
+    {entries ? (
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="center" colSpan={2}>Tarih</TableCell>
+              <TableCell align="center">Ders</TableCell>
+              <TableCell align="center">Konu</TableCell>
+              <TableCell align="center">Hedef Süre(dk)</TableCell>
+              <TableCell align="center">Hedef Soru</TableCell>
+              <TableCell align="center">Çözülen Soru</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Object.keys(schedule).map((day, i) => (
+              <>
+                <TableRow key={i}>
+                  <TableCell align="center" rowSpan={schedule[day].length + 1}>{dates?.[day]?.split('-').reverse().join('.')}</TableCell>
+                  <TableCell align="center" rowSpan={schedule[day].length + 1}>{day}</TableCell>
+                </TableRow>
+                {schedule[day].map((lesson, index) => (
+                  <TableRow key={`${day}-${index}`}>
+                    <TableCell align="center">{lesson.ders}</TableCell>
+                    <TableCell align="center">
+                      <Input
+                        disableUnderline={true}
+                        sx={{ width: "105px" }}
+                        value={
+                          entries &&
+                          entries?.filter(
+                            (item) =>
+                              item.tarih === dates[day] && item.ders === lesson.ders
+                          )[0]?.konu
+                        }
+                        placeholder="Konu"
+                        onChange={(e) =>
+                          handleInputChange2(e, day, dates[day], lesson.ders, lesson.süre, lesson.soru)
+                        }
+                      />
+                    </TableCell>
+                    <TableCell align="center">{lesson.süre}</TableCell>
+                    <TableCell align="center">{lesson.soru}</TableCell>
+                    <TableCell align="center">
+                      <Input
+                        disableUnderline={true}
+                        sx={{ width: "105px" }}
+                        value={
+                          entries &&
+                          entries?.filter(
+                            (item) =>
+                              item.tarih === dates[day] && item.ders === lesson.ders
+                          )[0]?.sonuc
+                        }
+                        placeholder="Çözülen adet"
+                        onChange={(e) =>
+                          handleInputChange(e, day, dates[day], lesson.ders, lesson.süre, lesson.soru)
+                        }
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </>
+            ))}
+          </TableBody>
+        </Table>
+        <Box sx={{ m: 2, display: 'flex', justifyContent: 'flex-end' }}>
           <Button
-            sx={{ m: 2, cursor: "pointer !important" }}
             variant="contained"
             onClick={handleSubmit}
             size="small"
           >
-          {isLoading && <CircularProgress color="info" size={20} />}
-        {!isLoading && 'Kaydet'}
+            {isLoading && <CircularProgress color="info" size={20} />}
+            {!isLoading && 'Kaydet'}
           </Button>
-        </Grid>
+        </Box>
+      </TableContainer>
+    ) : (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    )}
+  </>
+);
 
-
-      )
-        :
-        (
-
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <CircularProgress />
-          </Box>
-
-        )
-
-
-      }
-    </>
-
-
-  );
 
 }
 
