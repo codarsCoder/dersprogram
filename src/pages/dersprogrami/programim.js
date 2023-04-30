@@ -79,7 +79,6 @@ function Programim() {
         "dates": dates
       });
 
-      console.log(data?.data)
       if (data.data?.entry === 3) { //girilmş sonuçlar varsa daha önceden hafta oluşturulmuş demektir direkt alıyoruz
         setEntries(data?.data.scheduleEntry)
 
@@ -149,7 +148,7 @@ const son = updatedEntries.map(item => {
     setEntries(updatedEntries);
   };
 
-  console.log(entries)
+
 
   //bu fonksiyon konu kısmını alıp veriyi güncelliyor
   const handleInputChange2 = (e, day, date, lesson, süre, adet) => {
@@ -204,7 +203,7 @@ const son = updatedEntries.map(item => {
     }
 
   };
-  console.log(entries)
+
 
 return (
   <>
@@ -213,7 +212,9 @@ return (
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center" colSpan={2}>Tarih</TableCell>
+              {/* <TableCell align="center" colSpan={2}>Tarih</TableCell> */}
+              <TableCell align="center" >Tarih</TableCell>
+              <TableCell align="center" >Gün</TableCell>
               <TableCell align="center">Ders</TableCell>
               <TableCell align="center">Konu</TableCell>
               <TableCell align="center">Hedef Süre(dk)</TableCell>

@@ -171,7 +171,7 @@ const [weeks, setWeeks] = useState()
   }, [dates])
 
   useEffect(() => {
-    console.log("first")
+
     setChartData()
     setChartData(entries)
 
